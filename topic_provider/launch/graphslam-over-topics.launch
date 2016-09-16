@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<launch>
+
+	<node pkg="topic_provider" type="topic_provider_node" name="topic_provider_node" output="screen">
+	</node>
+
+</launch>
+
