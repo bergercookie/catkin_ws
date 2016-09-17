@@ -1,0 +1,3 @@
+[submodule "mrpt_navigation"]
+	path = mrpt_navigation
+	url = https://github.com/mrpt-ros-pkg/mrpt_navigation
