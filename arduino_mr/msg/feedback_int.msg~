@@ -1,0 +1,12 @@
+#feedback_int.msg
+
+Int8 mode
+Int16 encoderR
+Int16 encoderL
+Uint8 pwm_to_motorR
+Uint8 pwm_to_motorL
+Uint8 looptime
+Int16 analogData0
+Int16 analogData1
+
+

@@ -1,0 +1,6 @@
+int16 mode
+int16 rotationR
+int16 rotationL
+int16 pwm_to_motorR
+int16 pwm_to_motorL
+int16 looptime

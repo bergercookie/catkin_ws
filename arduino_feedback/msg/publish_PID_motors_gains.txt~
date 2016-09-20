@@ -1,0 +1,2 @@
+rostopic pub gains_input arduino_feedbk/PID_motors_gains '[[1010, 0, 0],[10, 0, 0]]'
+

@@ -1,0 +1,21 @@
+int16 mode
+int16 speedR
+string rotationR 
+int16 speedL
+string rotationL 
+int16 encoderR
+int16 encoderL
+int16 pwm_to_motorR
+int16 pwm_to_motorL
+int16 looptime
+int16 requested_wheel_speed_R
+int16 requested_wheel_speed_L
+int16 requested_speed_linear
+int16 requested_speed_angular
+int16 requested_pwmR
+int16 requested_pwmL
+float32 linear_distance
+float32 angle
+
+
+
