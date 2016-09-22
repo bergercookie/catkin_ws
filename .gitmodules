@@ -4,3 +4,6 @@
 [submodule "multimaster_fkie"]
 	path = multimaster_fkie
 	url = https://github.com/fkie/multimaster_fkie
+[submodule "rosserial"]
+	path = rosserial
+	url = https://github.com/ros-drivers/rosserial
