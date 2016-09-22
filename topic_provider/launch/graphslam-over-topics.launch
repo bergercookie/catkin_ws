@@ -2,6 +2,8 @@
 
 <launch>
 
+	<!-- Socket Communication parameters -->
+
 	<!-- Launch Arguments -->
 	<arg name="rosbag_file" default="gmapping_demo/basic_localization_stage.bag"/>
 	<arg name="scan_topic" default="/laser_scan"/>
@@ -23,6 +25,14 @@
 		pkg="topic_provider"
 		type="topic_provider_node"
 		name="topic_provider_node"
+		output="screen"
+		>
+	</node>
+
+	<node
+		pkg="topic_provider"
+		type="test.py"
+		name="graphslam_engine_launcher"
 		output="screen"
 		>
 	</node>
