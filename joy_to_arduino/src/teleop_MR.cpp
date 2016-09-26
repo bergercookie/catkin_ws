@@ -31,23 +31,31 @@ Teleop_MR::Teleop_MR()
 
 void Teleop_MR::joyCallback(const sensor_msgs::Joy:ConstPtr& joy)
 {
+	// find the mode, the joystick is running on
 	arduino_feedback::arduino_input message;
-	if (joy.button[1]==true){ message.mode=1; current_mode=1;}
-	if (joy.button[2]==true){ message.mode=2; current_mode=2;}
-	if (joy.button[3]==true){ message.mode=3; current_mode=3;}
+	if (joy.button[1]==true) {
+		message.mode=1;
+		current_mode=1;
+	}
+	if (joy.button[2]==true) {
+		message.mode=2;
+		current_mode=2;
+	}
+	if (joy.button[3]==true) {
+		message.mode=3;
+		current_mode=3;
+	}
 	
-	if (current_mode == 1)
-	{
+	// Having set the mode specify the respective quantities
+	if (current_mode == 1) {
 		message.linear = l_scale_*joy.axes[2];
 		message.angular = a_scale_*joy.axes[1];
 	}
-	else if (current_mode == 2)
-	{
+	else if (current_mode == 2) {
 		message.wheel_speed_reqR = l_scale_*joy.axes[2];
 		message.wheel_speed_reqL = l_scale_*joy.axes[4];
 	}
-	else
-	{
+	else {
 		message.pwm_reqR = scale_PWM_*joy.axes[2];
 		message.pwm_reqL = scale_PWM_*joy.axes[4];
 	}

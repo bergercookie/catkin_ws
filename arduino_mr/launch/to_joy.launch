@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <launch>
 	<node pkg="xsens_driver" type="mtnode_new.py" name="xsens_driver" output="screen" >
 
