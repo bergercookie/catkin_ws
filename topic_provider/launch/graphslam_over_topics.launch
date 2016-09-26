@@ -1,25 +1,44 @@
 <?xml version="1.0"?>
 
+<!--
+Mon Sep 26 22:04:19 EEST 2016, Nikos Koukis
+
+Current launchfile provides a thin wrapper around the MRPT grahpslam-engine
+application which allows it to run using measurements published in ROS topics.
+Launchfile can be executed either either by running a rosbag first to populate
+the corresponding ROS topics (offline mode) or it assumes that the algorithm is
+executed online (therefore the ROS topics are populated by the current sensor
+measurements (online mode)
+
+-->
+
 <launch>
 
 	<!-- LAUNCH ARGUMENTS -->
+	<!-- ************************************* -->
 
 	<!-- Arguments for the playback of data -->
 	<arg
 		name="rosbag_file"
-		default="gmapping_demo/basic_localization_stage.bag"
+		default="20160926_underwater_lab/records.bag"
 		>
 	</arg>
 	<arg
 		name="scan_topic"
-		default="/laser_scan"
+		default="/scan"
 		>
+	</arg>
+	<arg
+	    name="odometry_topic"
+	    default="/pioneer/odom"
+	    >
 	</arg>
 
 	<!-- Arguments for graphslam-engine -->
 	<!-- to be specified by the user as a command line option -->
 	<arg
-	    name="ini_file" >
+	    name="ini_file"
+	    >
 	</arg>
 	<arg
 	    name="gt_file"
@@ -44,10 +63,25 @@
 	</arg>
 
     <!-- LAUNCH PARAMETERS -->
+	<!-- ************************************* -->
 
-    <param name="/use_sim_time" value="false" />
-    <param name="/base_scan" value="$(arg scan_topic)" />
+    <param
+        name="/use_sim_time"
+        value="true"
+        >
+    </param>
 
+    <!-- TODO - maybe change this name to /topics/scan ? -->
+    <param
+        name="/topics/scan"
+        value="$(arg scan_topic)"
+        >
+    </param>
+    <param
+        name="/topics/odom"
+        value="$(arg odometry_topic)"
+        >
+    </param>
 
     <!-- Parameters for the graphslam-engine application -->
 
@@ -66,8 +100,7 @@
 
     <param
         name="/graphslam_engine/deciders_optimizers/NRD"
-        value="$(arg NRD)
-        "
+        value="$(arg NRD)"
         type="string"
         >
     </param>
@@ -84,44 +117,50 @@
         >
     </param>
 
-<!-- NODES TO BE LAUNCHED -->
+	<!-- NODES TO BE LAUNCHED -->
+	<!-- ************************************* -->
 
-<!-- rosbag for playing back the data -->
-<node
-	pkg="rosbag"
-	type="play"
-	name="rosbag_player"
-	args="--clock $(find topic_provider)/rosbags/$(arg rosbag_file) /base_scan:=$(arg scan_topic)"
-	>
-</node>
+	<node
+		pkg="rosbag"
+		type="play"
+		name="rosbag_player"
+		args="--clock $(find topic_provider)/rosbags/$(arg rosbag_file) /scan:=$(arg scan_topic)"
+		>
+	</node>
 
-<!-- Node that parses the external .ini file and publishes necessary
-			variables in the ROS parameter server -->
-<node
-	pkg="topic_provider"
-	type="ini_parser.py"
-	name="ini_parser"
-	output="screen"
-	>
-</node>
 
-<!--[> Node that plays back the topics to a TCP stream <]-->
-<!--<node-->
-	<!--pkg="topic_provider"-->
-	<!--type="topic_provider_node"-->
-	<!--name="topic_provider_node"-->
-	<!--output="screen"-->
-	<!-->-->
-	<!--</node>-->
+	    Node that parses the external .ini file and publishes necessary
+		variables in the ROS parameter server
+	-->
+	<node
+		pkg="topic_provider"
+		type="ini_parser.py"
+		name="ini_parser"
+		output="screen"
+		launch-prefix="nice -20"
+		>
+	</node>
 
-<!-- Wrapper node that launches the MRPT graphslam-engine application -->
-<node
-    pkg="topic_provider"
-    type="graphslam_engine_launcher.py"
-    name="graphslam_engine_launcher"
-    output="screen"
-    >
-    </node>
+	<!-- Node that plays back the topics on a TCP stream -->
+	<node
+		pkg="topic_provider"
+		type="topic_provider_node"
+		name="topic_provider_node"
+		output="screen"
+		>
+	</node>
+
+	<!-- Wrapper node that launches the MRPT graphslam-engine application -->
+	<node
+  	pkg="topic_provider"
+  	type="graphslam_engine_launcher.py"
+  	name="graphslam_engine_launcher"
+  	output="screen"
+  	>
+	</node>
+
+	<!-- TODO if group for using rosbag only in simulations... 
+	 rosbag for playing back the data  -->
 
 
 </launch>

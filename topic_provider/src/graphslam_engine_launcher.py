@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" 
+"""
 Wrapper for launching the MRPT graphslam-engine application from a ROS node.
 
 """
@@ -30,7 +30,7 @@ def main():
         "ini_file": "--ini-file",
         "gt_file": "--ground-truth"
     }
-    command_opt_to_value = {} # None if this is a switch argument
+    command_opt_to_value = {}
 
     # find the graphslam-engine executable
     if bash_mrpt_var in os.environ:
@@ -85,19 +85,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-
-
-# path to executable
-
-rawlog_path = " " # TODO - add here..
-
-
-# command composition and execution
-# call([app_path, 
-
-
-
-
-
-

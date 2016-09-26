@@ -49,11 +49,12 @@ def main():
     # use default values if these parameters aren't found
     server_addr = parser.get(comm_ini_section, "server_addr",
                              fallback="127.0.0.1")
-    server_port_no = parser.get(comm_ini_section, "server_port_no",
-                                fallback=6800)
+    server_port_no = int(parser.get(comm_ini_section, "server_port_no",
+                                    fallback=6800))
 
-    rospy.set_param("/tcp/server_addr", server_addr)
-    rospy.set_param("/tcp/server_port_no", server_port_no)
+
+    rospy.set_param("/graphslam_engine/tcp/server_addr", server_addr)
+    rospy.set_param("/graphslam_engine/tcp/server_port_no", server_port_no)
 
     rospy.loginfo("{name}: TCP parameters are set. Exiting... ".format(
         name=node_name))

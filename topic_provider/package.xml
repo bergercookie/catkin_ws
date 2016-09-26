@@ -50,12 +50,20 @@
   <build_depend>sensor_msgs</build_depend>
   <build_depend>mrpt_bridge</build_depend>
   <build_depend>mrpt</build_depend>
+  <build_depend>mrpt_bridge</build_depend>
+  <build_depend>arduino_mr</build_depend>
+  <build_depend>joy</build_depend>
+  <build_depend>hokuyo_node</build_depend>
+
   <run_depend>roscpp</run_depend>
   <run_depend>rospy</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>mrpt_bridge</run_depend>
   <run_depend>mrpt</run_depend>
+  <run_depend>arduino_mr</run_depend>
+  <run_depend>joy</run_depend>
+  <run_depend>hokuyo_node</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
