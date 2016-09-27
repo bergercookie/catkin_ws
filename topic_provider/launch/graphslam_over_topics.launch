@@ -62,14 +62,19 @@ measurements (online mode)
 	    >
 	</arg>
 
+    <!-- Miscellaneous args -->
+
+
     <!-- LAUNCH PARAMETERS -->
 	<!-- ************************************* -->
 
+
     <param
         name="/use_sim_time"
-        value="true"
+        value="$(env ROS_IS_SIMULATION)"
         >
     </param>
+
 
     <!-- TODO - maybe change this name to /topics/scan ? -->
     <param
@@ -117,18 +122,39 @@ measurements (online mode)
         >
     </param>
 
+	<param
+	    name="/use_sim_time"
+	    value="$(env ROS_IS_SIMULATION)"
+	    >
+	</param>
+
+
 	<!-- NODES TO BE LAUNCHED -->
 	<!-- ************************************* -->
 
-	<node
-		pkg="rosbag"
-		type="play"
-		name="rosbag_player"
-		args="--clock $(find topic_provider)/rosbags/$(arg rosbag_file) /scan:=$(arg scan_topic)"
-		>
-	</node>
+    <!--
+        If we run on a simulation launch the specified rosbag, otherwise
+        include the launchfile that setups the robot for online use
+    -->
 
+    <group if="$(env ROS_IS_SIMULATION)">
+	    <node
+		    pkg="rosbag"
+		    type="play"
+		    name="rosbag_player"
+		    args="--clock $(find topic_provider)/rosbags/$(arg rosbag_file) /scan:=$(arg scan_topic)"
+		    >
+	    </node>
+	</group>
 
+	<group unless="$(env ROS_IS_SIMULATION)">
+	    <include
+	        file="setup_experiment.launch"
+	        >
+	    </include>
+	</group>
+
+	<!--
 	    Node that parses the external .ini file and publishes necessary
 		variables in the ROS parameter server
 	-->
@@ -141,7 +167,10 @@ measurements (online mode)
 		>
 	</node>
 
-	<!-- Node that plays back the topics on a TCP stream -->
+	<!--
+	     Node that plays back the topics on a TCP stream for the MRPT
+	     graphslam-engine application to get a hold of the measurements
+	-->
 	<node
 		pkg="topic_provider"
 		type="topic_provider_node"
@@ -158,10 +187,6 @@ measurements (online mode)
   	output="screen"
   	>
 	</node>
-
-	<!-- TODO if group for using rosbag only in simulations... 
-	 rosbag for playing back the data  -->
-
 
 </launch>
 

@@ -26,10 +26,12 @@ def main():
     rospy.init_node(node_name)
 
     comm_ini_section = "CMeasurementProviderParameters"
+    top_param_ns = "/graphslam_engine/"
 
-    # read the server config from the .ini file and publish the server-related
-    # parameters
-    ini_file_path = rospy.get_param("/graphslam_engine/filenames/ini_file")
+    # Initialization - Fetch where I am reading from to the ROS param. server
+    ini_file_path = rospy.get_param("".join([
+        top_param_ns,
+        "filenames/ini_file"]))
     rospy.loginfo("{name}: ini_file_path = {path}".format(
         name=node_name,
         path=ini_file_path))
@@ -46,18 +48,39 @@ def main():
         name=node_name,
         sections=parser.sections()))
 
-    # use default values if these parameters aren't found
-    server_addr = parser.get(comm_ini_section, "server_addr",
+    # Parse the necessary parameters from the .ini file and post to ROS param
+    # server
+
+    # Server configuration parameters
+    server_addr = parser.get(comm_ini_section,
+                             "server_addr",
                              fallback="127.0.0.1")
-    server_port_no = int(parser.get(comm_ini_section, "server_port_no",
+    server_port_no = int(parser.get(comm_ini_section,
+                                    "server_port_no",
                                     fallback=6800))
+    rospy.set_param("".join([top_param_ns, "tcp/server_addr"]),
+                    server_addr)
+    rospy.set_param("".join([top_param_ns, "tcp/server_port_no"]),
+                    server_port_no)
 
+    rospy.loginfo("{name}: TCP parameters are set.".format(name=node_name))
 
-    rospy.set_param("/graphslam_engine/tcp/server_addr", server_addr)
-    rospy.set_param("/graphslam_engine/tcp/server_port_no", server_port_no)
-
-    rospy.loginfo("{name}: TCP parameters are set. Exiting... ".format(
-        name=node_name))
+    # Available message types for the data transmission
+    msg_types_format_1 = int(parser.get(comm_ini_section,
+                                        "MSG_TYPE_FORMAT_1",
+                                        fallback=1))
+    msg_types_format_2 = int(parser.get(comm_ini_section,
+                                        "MSG_TYPE_FORMAT_2",
+                                        fallback=2))
+    msg_types_exit = int(parser.get(comm_ini_section,
+                                    "MSG_TYPE_EXIT",
+                                    fallback=99))
+    rospy.set_param("".join([top_param_ns, "msg_types/format_1"]),
+                    msg_types_format_1)
+    rospy.set_param("".join([top_param_ns, "msg_types/format_2"]),
+                    msg_types_format_2)
+    rospy.set_param("".join([top_param_ns, "msg_types/exit"]),
+                    msg_types_exit)
 
 
 if __name__ == "__main__":

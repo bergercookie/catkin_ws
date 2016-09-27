@@ -16,10 +16,11 @@
  * Method tries to fetch the parameter given a certain time threshold
  * \return True if the fetching operation is successful
  */
+template<class T>
 bool getParamWithTimeout(
 		const ros::NodeHandle& nh,
 		const std::string& param_name,
-		std::string* param_content,
+		T* param_content,
 		size_t timeout_ms=10000 /* ms */) {
 	MRPT_START;
 	using namespace std;
@@ -46,10 +47,11 @@ bool getParamWithTimeout(
  *
  * \return True if the fetching operation is successful
  */
+template<class T>
 bool getParamWithTimeout(
 		const ros::NodeHandle& nh,
 		const std::string& param_name,
-		std::string* param_content,
+		T* param_content,
 		mrpt::utils::COutputLogger* logger,
 		size_t timeout_ms=10000 /* ms */) {
 	MRPT_START;
@@ -67,11 +69,10 @@ bool getParamWithTimeout(
 	bool found = getParamWithTimeout(nh, param_name, param_content, timeout_ms);
 
 	if (found) {
-		logger->logFmt(
-				LVL_INFO,
-				"Successfully fetched parameter: \"%s\" ==> \"%s\"",
-				param_name.c_str(),
-				param_content->c_str());
+		std::stringstream msg("");
+		msg << "Successfully fetched parameter: " << param_name << " ==> "
+			<< *param_content;
+		logger->logStr(LVL_INFO, msg.str().c_str());
 	}
 	else {
 		logger->logFmt(
@@ -100,6 +101,9 @@ CTopicSniffer::CTopicSniffer(ros::NodeHandle* nh) {
 
 	// keep a pointer to the ROS node handler
 	this->nh = nh;
+
+	top_param_ns = "/graphslam_engine/";
+	
 }
 CTopicSniffer::~CTopicSniffer() {
 	MRPT_LOG_DEBUG_STREAM << "Releasing the client object..";
@@ -127,7 +131,7 @@ void CTopicSniffer::sniffLaserScan(const sensor_msgs::LaserScan::ConstPtr& ros_l
 
 	MRPT_LOG_DEBUG_STREAM << "sniffLaserScan: Sending LaserScan to MRPT node...";
 	CMessage msg;
-	msg.type = msg_types["FORMAT 2"];
+	msg.type = msg_types["FORMAT_2"];
 	msg.serializeObject(mrpt_laser_scan.pointer());
 	m_client->sendMessage(msg);
 	MRPT_LOG_DEBUG_STREAM << "LaserScan was sent.";
@@ -153,26 +157,41 @@ void CTopicSniffer::initServer() {
 	using namespace std;
 	using namespace mrpt::utils;
 
-	// initialization...
-	// TODO - define these in a seperate class - .ini file?
-	msg_types["FORMAT 1"] = 1; /**< Transmit data in the 1st rawlog MRPT format */
-	msg_types["FORMAT 2"] = 2; /**< Transmit data in the 2nd rawlog MRPT format */
-	msg_types["EXIT"] = 99; /**< Code is returned when no more data is to be transmitted */
-
 	// fetch the server parameters from the ROS parameter server
 	ASSERT_(nh);
 
 	MRPT_LOG_DEBUG_STREAM << "Fetching the server configuration from the ROS parameter server..." << endl;
 	bool found_server = getParamWithTimeout(
 			*nh,
-			"/graphslam_engine/tcp/server_addr",
+			top_param_ns + "tcp/server_addr",
 			&server_addr);
-
-	// TODO - Change the implementation on this one as well...
-	bool found_port = nh->getParam(
-			"/graphslam_engine/tcp/server_port_no", server_port_no);
+	bool found_port = getParamWithTimeout(
+			*nh,
+			top_param_ns + "tcp/server_port_no",
+			&server_port_no);
+	ASSERTMSG_(found_server,
+			"TCP Server configuration was not found in the parameter server")
 	ASSERTMSG_(found_port,
-			"TCP Port was not found in the parameter server")
+			"TCP Port configuration was not found in the parameter server")
+
+	// fetch the message codes for the data tranmission from the ROS parameter
+	// server
+	bool found_format_1_code = getParamWithTimeout(
+			*nh,
+			top_param_ns + "msg_types/format_1",
+			&msg_types["FORMAT_1"]);
+	bool found_format_2_code = getParamWithTimeout(
+			*nh,
+			top_param_ns + "msg_types/format_2",
+			&msg_types["FORMAT_2"]);
+	bool found_exit_code = getParamWithTimeout(
+			*nh,
+			top_param_ns + "msg_types/exit",
+			&msg_types["EXIT"]);
+
+	ASSERTMSG_(found_format_1_code, "Code FORMAT #1 was not found");
+	ASSERTMSG_(found_format_2_code, "Code FORMAT #2 was not found");
+	ASSERTMSG_(found_exit_code, "Code EXIT was not found");
 
 	// setup the TCP Socket Server
 	MRPT_LOG_INFO_STREAM << "Setting up TCP Socket server." << endl

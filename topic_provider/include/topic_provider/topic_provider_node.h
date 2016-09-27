@@ -83,6 +83,10 @@ private:
 
 	ros::NodeHandle* nh;
 
+	/** Top namespace in which we fetch the parameters for the graphslam-engine
+	 */
+	std::string top_param_ns;
+
 	/** server instance - to be initialized in the constructor */
 	mrpt::utils::CServerTCPSocket* m_server;
 	/**\brief Socket to send the topic measurements to
@@ -95,7 +99,7 @@ private:
 	 */
 	mrpt::utils::CClientTCPSocket* m_client;
 
-	std::map<std::string, unsigned int> msg_types;
+	std::map<std::string, int> msg_types;
 	std::string server_addr;
 	int server_port_no;
 

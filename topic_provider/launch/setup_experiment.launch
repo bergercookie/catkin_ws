@@ -21,7 +21,7 @@ Communication with the arduino is achived via a /dev device.
 	<!-- Hokuyo Laser Scanner -->
 	<arg
 		name="hokuyo_port"
-		default="/dev/ttyACM2"
+		default="/dev/ttyACM1"
 		>
 	</arg>
 	<arg
@@ -30,18 +30,10 @@ Communication with the arduino is achived via a /dev device.
 		>
 	</arg>
 
-	<!-- TODO - Delete this? -->
-	<!-- Rosbag Recordings-->
-	<arg
-		name="rosbag_dir"
-		default="bags"
-		>
-	</arg>
-
 	<!-- Arduino configuration -->
 	<arg
 		name="arduino_port"
-		default="/dev/ttyACM1"
+		default="/dev/ttyACM0"
 		>
 	</arg>
 
@@ -63,6 +55,7 @@ Communication with the arduino is achived via a /dev device.
 		default="2at"
 		>
 	</arg>
+
 
   <!-- LAUNCH PARAMETERS -->
 	<!-- ************************************* -->
@@ -86,6 +79,15 @@ Communication with the arduino is achived via a /dev device.
 		name="arduino/port"
 		value="$(arg arduino_port)"
 		>
+	</param>
+
+    <!-- Miscellaneous parameters -->
+
+	<param
+	    name="/use_sim_time"
+	    value="false"
+	    type="bool"
+	    >
 	</param>
 
 
