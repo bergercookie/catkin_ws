@@ -4,3 +4,9 @@
 [submodule "rosserial"]
 	path = rosserial
 	url = https://github.com/ros-drivers/rosserial
+[submodule "mrpt_navigation"]
+	path = mrpt_navigation
+	url = https://github.com/bergercookie/mrpt_navigation
+[submodule "mrpt_slam"]
+	path = mrpt_slam
+	url = https://github.com/bergercookie/mrpt_slam
