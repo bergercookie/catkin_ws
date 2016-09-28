@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   sensor_msgs
+  geometry_msgs
   mrpt_bridge
   arduino_mr
   joy
@@ -112,7 +113,7 @@ find_package(MRPT REQUIRED base gui obs maps opengl graphslam)
 catkin_package(
   INCLUDE_DIRS include
   #LIBRARIES topic_provider
-  CATKIN_DEPENDS roscpp rospy std_msgs mrpt_bridge sensor_msgs
+  CATKIN_DEPENDS roscpp rospy std_msgs mrpt_bridge sensor_msgs geometry_msgs arduino_mr
   #DEPENDS system_lib
 )
 

@@ -30,7 +30,7 @@ measurements (online mode)
 	</arg>
 	<arg
 	    name="odometry_topic"
-	    default="/pioneer/odom"
+	    default="/pioneer/position_odom"
 	    >
 	</arg>
 
@@ -147,12 +147,12 @@ measurements (online mode)
 	    </node>
 	</group>
 
-	<group unless="$(env ROS_IS_SIMULATION)">
-	    <include
-	        file="setup_experiment.launch"
-	        >
-	    </include>
-	</group>
+	<!--<group unless="$(env ROS_IS_SIMULATION)">-->
+			<!--<include-->
+					<!--file="setup_experiment.launch"-->
+					<!-->-->
+			<!--</include>-->
+	<!--</group>-->
 
 	<!--
 	    Node that parses the external .ini file and publishes necessary
@@ -181,11 +181,11 @@ measurements (online mode)
 
 	<!-- Wrapper node that launches the MRPT graphslam-engine application -->
 	<node
-  	pkg="topic_provider"
-  	type="graphslam_engine_launcher.py"
-  	name="graphslam_engine_launcher"
-  	output="screen"
-  	>
+  	    pkg="topic_provider"
+  	    type="graphslam_engine_launcher.py"
+  	    name="graphslam_engine_launcher"
+  	    output="screen"
+  	    >
 	</node>
 
 </launch>

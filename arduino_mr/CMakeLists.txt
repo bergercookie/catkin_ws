@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   rosserial_arduino
   std_msgs
+  geometry_msgs
   joy_to_arduino
 )
 
@@ -53,6 +54,7 @@ add_message_files(
    arduino_input.msg
    PID_gains.msg
    PID_motors_gains.msg
+   Pose2DStamped.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -73,6 +75,7 @@ add_message_files(
 generate_messages(
    DEPENDENCIES
    std_msgs
+   geometry_msgs
 )
 
 ###################################

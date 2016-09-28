@@ -134,23 +134,40 @@ void CTopicSniffer::sniffLaserScan(const sensor_msgs::LaserScan::ConstPtr& ros_l
 	msg.type = msg_types["FORMAT_2"];
 	msg.serializeObject(mrpt_laser_scan.pointer());
 	m_client->sendMessage(msg);
-	MRPT_LOG_DEBUG_STREAM << "LaserScan was sent.";
 
 }
 
-void CTopicSniffer::sniffOdom() {
+void CTopicSniffer::sniffOdom(const arduino_mr::Pose2DStamped::ConstPtr& ros_odom) {
 	using namespace std;
 	using namespace mrpt::utils;
 	using namespace mrpt::obs;
+	using namespace mrpt::poses;
 
 	MRPT_LOG_DEBUG_STREAM << "sniffOdom: Received an odometry msg. Converting it to MRPT format...";
+	MRPT_LOG_DEBUG_STREAM << *ros_odom << endl;
 
 	// build and fill an CObservationOdometry instance
 
 	CObservationOdometryPtr mrpt_odom = CObservationOdometry::Create();
+	mrpt_bridge::convert(
+			/* src = */ ros_odom->header.stamp,
+			/* dst = */mrpt_odom->timestamp);
+	mrpt_odom->hasEncodersInfo = false;
+	mrpt_odom->hasVelocities = false;
+
+	mrpt_odom->odometry.x(ros_odom->pose.x);
+	mrpt_odom->odometry.y(ros_odom->pose.y);
+	mrpt_odom->odometry.phi(ros_odom->pose.theta);
+
+	MRPT_LOG_DEBUG_STREAM << "Odometry - MRPT format:\n\t" << mrpt_odom->odometry << endl;
 
 	// serialize and send it to the TCP stream
-	//
+	MRPT_LOG_DEBUG_STREAM << "sniffOdom: Sending odometry measurement to MRPT node...";
+	CMessage msg;
+	msg.type = msg_types["FORMAT_2"];
+	msg.serializeObject(mrpt_odom.pointer());
+	m_client->sendMessage(msg);
+
 }
 
 void CTopicSniffer::initServer() {
@@ -246,13 +263,23 @@ int main(int argc, char **argv)
 	std::string odom_param_name="/topics/odom";
 	/**\}*/
 
+	bool found;
+
 	// Odometry
-	//ros::Subscriber odom_sub = nh.subscribe("odom/", 1000, &CTopicSniffer::sniffOdom, &sniffer);
+	// make sure that I know the topic off which I will be fetching the odometry
+	std::string odom_topic("");
+	found = getParamWithTimeout(nh, odom_param_name, &odom_topic, &logger);
+	ASSERT_(found);
+
+	ros::Subscriber odom_sub = nh.subscribe<arduino_mr::Pose2DStamped>(
+			odom_topic,
+			1000,
+			&CTopicSniffer::sniffOdom, &sniffer);
 
 	// LaserScans
 	// make sure that I know the topic off which I will be fetching laser scans
 	std::string scan_topic("");
-	bool found = getParamWithTimeout(nh, scan_param_name, &scan_topic, &logger);
+	found = getParamWithTimeout(nh, scan_param_name, &scan_topic, &logger);
 	ASSERT_(found);
 
 	ros::Subscriber laserscans_sub = nh.subscribe<sensor_msgs::LaserScan>(
