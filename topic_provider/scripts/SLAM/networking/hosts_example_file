@@ -1,0 +1,22 @@
+# File contains a sample configuration for using the multimaster ROS package
+# with the dnsmasq DNS server
+
+127.0.0.1	localhost
+127.0.1.1	nickkouk-ubuntu
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+# MR-SLAM agents
+192.168.100.1  nickkouk-ubuntu
+192.168.100.2 nickkouk-mac
+192.168.100.17 odroid-XU3
+192.168.100.18 odroid-U
+
+# experimental entries
+192.168.100.13 ubuntu-temp
+192.168.100.11 raspberry-pi3
