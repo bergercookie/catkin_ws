@@ -132,9 +132,12 @@ class ATX2():
         u_y = u * sin(self.theta_total)
 
         # update position estimation - 1st order integration
-        self.x_total += u_x / self.rate
-        self.y_total += u_y / self.rate
+        self.x_total += u_x / float(self.rate)
+        self.y_total += u_y / float(self.rate)
+
         self.theta_total += omega / self.rate
+        self.theta_total %= (2 * pi)
+
 
         # publish position
         pos_msg = Pose2DStamped()

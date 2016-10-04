@@ -159,7 +159,7 @@ void CTopicSniffer::sniffOdom(const arduino_mr::Pose2DStamped::ConstPtr& ros_odo
 	mrpt_odom->odometry.y(ros_odom->pose.y);
 	mrpt_odom->odometry.phi(ros_odom->pose.theta);
 
-	MRPT_LOG_DEBUG_STREAM << "Odometry - MRPT format:\n\t" << mrpt_odom->odometry << endl;
+	MRPT_LOG_DEBUG_STREAM << "Odometry - MRPT format:\t" << mrpt_odom->odometry << endl;
 
 	// serialize and send it to the TCP stream
 	MRPT_LOG_DEBUG_STREAM << "sniffOdom: Sending odometry measurement to MRPT node...";
