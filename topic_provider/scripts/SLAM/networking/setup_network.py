@@ -12,6 +12,7 @@ import argparse
 from subprocess import call
 import os
 from custom_exceptions import NoRootAccessError, ProgramNotFoundError, InterfaceNotFoundError
+import sys
 from time import gmtime, strftime
 
 # Arguement Parsing
@@ -66,17 +67,33 @@ def main():
     check_reqs(ip_address=ip_address, wlan_interface=wlan_interface)
 
     # create interfaces file
-    interfaces_dir = "/etc/network/interfaces.d"
-    interfaces_main = "/etc/network/interfaces"
-    interfaces_fname = "multi_robot_adhoc"
-    if not os.path.isdir(interfaces_dir):
-        print("Directory {} doesn't exist, creating it...".format(
-            interfaces_dir))
-        if not dry_run:
-            os.mkdir(interfaces_dir, 715)
+    # interfaces_dir = "/etc/network/interfaces.d"
+    # interfaces_main = "/etc/network/interfaces"
+    interfaces_dir = "."
+    interfaces_main = "kalimera"
+
+    # Search for current wlan* configuration in interfaces file - if there,
+    # exit
+    print("Checking if {wlan} configuration already exists in {fname}".format(
+        wlan=wlan_interface,
+        fname=interfaces_main))
+    wlan2_already_configured = False
+    wlan_exists_line = "iface {}".format(wlan_interface)
+    with open(interfaces_main, "r") as f:
+        lines = [line.strip() for line in f.readlines()]
+
+        for a_line in lines:
+            if wlan_exists_line in a_line:
+                wlan2_already_configured = True
+                break
+    if wlan2_already_configured:
+        print("{wlan} is already configured in {fname}. If configuration is not correct, remove the corresponding entries and run the program again Exiting...".format(
+            wlan=wlan_interface,
+            fname=interfaces_main))
+        sys.exit(1)
 
     # write the interfaces file
-    with open("".join([interfaces_dir, os.sep, interfaces_fname]), "w") as f:
+    with open("".join([interfaces_dir, os.sep, interfaces_main]), "a") as f:
         comments = [
             "Automatically generated script - {date}".format(
                 date=strftime("%a, %d %b %Y %H:%M:%S", gmtime()))
@@ -99,32 +116,17 @@ def main():
 
         print("Writing interfaces file...\nContents:")
         for line in comments + directives:
-            print("\t" + line)
+            print("\t" + line, sep="")
 
         if not dry_run:
+            f.write(os.linesep)
             f.write("".join(comments))
             f.write("".join(os.linesep))
             f.write("".join(directives))
 
     print("Successfully written ad-hoc configuration to {}".format(
-        "".join([interfaces_dir, os.sep, interfaces_fname])))
+        "".join([interfaces_dir, os.sep, interfaces_main])))
 
-    # Source directive in /etc/network/interfaces
-    print("Adding corresponding source line in {} file...".format(
-        interfaces_main))
-    line_exists = False
-    source_command = "source-directory interfaces.d"
-    with open(interfaces_main, "r") as f:
-        lines = [line.strip() for line in f.readlines()]
-
-        if source_command in lines:
-            print("\nLine already exists, continuing normally...")
-            line_exists = True
-    if not line_exists:
-        with open(interfaces_main, "a") as f:
-            if not dry_run:
-                f.write(source_command)
-            print("OK.")
 
     # Restart the network interface for the changes to take effect
     print("Restarting {wlan} interface...".format(wlan=wlan_interface))
