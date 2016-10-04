@@ -5,7 +5,6 @@
 Tue Oct 4 12:31:34 EEST 2016, Nikos Koukis
 
 Current script sets up the adhoc network connection for the current host.
-
 """
 
 from __future__ import print_function
@@ -95,7 +94,7 @@ def main():
                       "   dns-nameservers 192.168.100.1",
                       ]
 
-        comments = ["#" + comment + os.linesep for comment in comments]
+        comments = ["# " + comment + os.linesep for comment in comments]
         directives = [directive + os.linesep for directive in directives]
 
         print("Writing interfaces file...\nContents:")
@@ -116,7 +115,7 @@ def main():
     line_exists = False
     source_command = "source-directory interfaces.d"
     with open(interfaces_main, "r") as f:
-        lines = f.readlines()
+        lines = [line.strip() for line in f.readlines()]
 
         if source_command in lines:
             print("\nLine already exists, continuing normally...")
@@ -132,6 +131,7 @@ def main():
     if not dry_run:
         call(["ifconfig", wlan_interface, "down"])
         call(["ifconfig", wlan_interface, "up"])
+    print("OK")
 
 
 
