@@ -39,3 +39,5 @@ Thumbs.db
 
 # ros-related
 topic_provider/rosbags
+
+*test*
