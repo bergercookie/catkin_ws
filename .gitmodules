@@ -10,3 +10,6 @@
 [submodule "mrpt_slam"]
 	path = mrpt_slam
 	url = https://github.com/bergercookie/mrpt_slam
+[submodule "vision_visp"]
+	path = vision_visp
+	url = ./vision_visp
