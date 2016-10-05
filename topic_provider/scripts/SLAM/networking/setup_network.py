@@ -17,7 +17,7 @@ from time import gmtime, strftime
 
 # Arguement Parsing
 parser = argparse.ArgumentParser(
-    description='Setup Ad-Hoc network configuration for mlti-robot SLAM')
+    description='Setup Ad-Hoc network configuration for multi-robot SLAM')
 
 # wireless interface
 parser.add_argument(
@@ -67,33 +67,31 @@ def main():
     check_reqs(ip_address=ip_address, wlan_interface=wlan_interface)
 
     # create interfaces file
-    # interfaces_dir = "/etc/network/interfaces.d"
-    # interfaces_main = "/etc/network/interfaces"
-    interfaces_dir = "."
-    interfaces_main = "kalimera"
+    interfaces_main = "/etc/network/interfaces"
+    # interfaces_main = "kalimera"
 
     # Search for current wlan* configuration in interfaces file - if there,
     # exit
     print("Checking if {wlan} configuration already exists in {fname}".format(
         wlan=wlan_interface,
         fname=interfaces_main))
-    wlan2_already_configured = False
+    wlan_already_configured = False
     wlan_exists_line = "iface {}".format(wlan_interface)
     with open(interfaces_main, "r") as f:
         lines = [line.strip() for line in f.readlines()]
 
         for a_line in lines:
             if wlan_exists_line in a_line:
-                wlan2_already_configured = True
+                wlan_already_configured = True
                 break
-    if wlan2_already_configured:
+    if wlan_already_configured:
         print("{wlan} is already configured in {fname}. If configuration is not correct, remove the corresponding entries and run the program again Exiting...".format(
             wlan=wlan_interface,
             fname=interfaces_main))
         sys.exit(1)
 
     # write the interfaces file
-    with open("".join([interfaces_dir, os.sep, interfaces_main]), "a") as f:
+    with open(interfaces_main, "a") as f:
         comments = [
             "Automatically generated script - {date}".format(
                 date=strftime("%a, %d %b %Y %H:%M:%S", gmtime()))
@@ -125,7 +123,7 @@ def main():
             f.write("".join(directives))
 
     print("Successfully written ad-hoc configuration to {}".format(
-        "".join([interfaces_dir, os.sep, interfaces_main])))
+        interfaces_main))
 
 
     # Restart the network interface for the changes to take effect
