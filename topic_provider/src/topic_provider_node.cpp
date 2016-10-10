@@ -90,11 +90,13 @@ bool getParamWithTimeout(
 //
 // Ctors, dtors
 CTopicSniffer::CTopicSniffer(ros::NodeHandle* nh) {
+	using namespace mrpt::utils;
+
 	m_class_name = "CTopicSniffer";
 	this->setLoggerName(m_class_name);
 
 	// TODO - find a more robust solution - read it off the .ini file?
-	this->setMinLoggingLevel(mrpt::utils::LVL_DEBUG);
+	this->setMinLoggingLevel(LVL_INFO);
 
 	// Variables initialization
 	m_client = NULL; // for safe deletion in the end
@@ -137,7 +139,7 @@ void CTopicSniffer::sniffLaserScan(const sensor_msgs::LaserScan::ConstPtr& ros_l
 
 }
 
-void CTopicSniffer::sniffOdom(const arduino_mr::Pose2DStamped::ConstPtr& ros_odom) {
+void CTopicSniffer::sniffOdom(const mrpt_msgs::Pose2DStamped::ConstPtr& ros_odom) {
 	using namespace std;
 	using namespace mrpt::utils;
 	using namespace mrpt::obs;
@@ -271,7 +273,7 @@ int main(int argc, char **argv)
 	found = getParamWithTimeout(nh, odom_param_name, &odom_topic, &logger);
 	ASSERT_(found);
 
-	ros::Subscriber odom_sub = nh.subscribe<arduino_mr::Pose2DStamped>(
+	ros::Subscriber odom_sub = nh.subscribe<mrpt_msgs::Pose2DStamped>(
 			odom_topic,
 			1000,
 			&CTopicSniffer::sniffOdom, &sniffer);

@@ -20,7 +20,8 @@ from math import *
 from math import pi
 from math import cos, sin
 import time
-from arduino_mr.msg import arduino_input, feedback_int, Pose2DStamped
+from arduino_mr.msg import arduino_input, feedback_int
+from mrpt_msgs.msg import Pose2DStamped
 from geometry_msgs.msg import Vector3Stamped
 
 
@@ -100,7 +101,7 @@ class ATX2():
             self.rate.sleep()
         print 'Safe shutdown'
         self.rosserial_process.stop()
-        
+      
     def updateMROdometry(self, msg):
 
         encoderR = msg.encoderR
@@ -147,7 +148,7 @@ class ATX2():
         pos_msg.pose.theta = self.theta_total
         self.pub_position_odom.publish(pos_msg)
 
-        
+
 
 if __name__ == '__main__':
     rospy.init_node('pioneer_atx_node')
@@ -155,10 +156,8 @@ if __name__ == '__main__':
     rate_it = rospy.Rate(obj.rate)
     try:
         while not rospy.is_shutdown():
-            rate_it.sleep()    
+            rate_it.sleep()
         #safe_shutdown()
             rospy.spin()
     except rospy.ROSInterruptException:
         pass
-
-        

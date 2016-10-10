@@ -7,18 +7,16 @@ project(${PROJECT_NAME})
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  std_msgs
-  sensor_msgs
-  geometry_msgs
-  mrpt_bridge
-  arduino_mr
-  joy
-  hokuyo_node
-
-
-)
+    roscpp
+    rospy
+    std_msgs
+    sensor_msgs
+    geometry_msgs
+    mrpt_bridge
+    mrpt_msgs
+    joy
+    hokuyo_node
+    )
 
 ## System dependencies are found with CMake's conventions
 find_package(MRPT REQUIRED base gui obs maps opengl graphslam)
@@ -111,11 +109,18 @@ find_package(MRPT REQUIRED base gui obs maps opengl graphslam)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include
-  #LIBRARIES topic_provider
-  CATKIN_DEPENDS roscpp rospy std_msgs mrpt_bridge sensor_msgs geometry_msgs arduino_mr
-  #DEPENDS system_lib
-)
+    INCLUDE_DIRS include
+    #LIBRARIES topic_provider
+    CATKIN_DEPENDS
+    roscpp
+    rospy
+    std_msgs
+    mrpt_bridge
+    sensor_msgs
+    geometry_msgs
+    mrpt_msgs
+    #DEPENDS system_lib
+    )
 
 ###########
 ## Build ##
@@ -125,8 +130,8 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(include)
 include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
+    ${catkin_INCLUDE_DIRS}
+    )
 
 ## Declare a C++ library
 # add_library(topic_provider

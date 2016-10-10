@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   joy_to_arduino
+  mrpt_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -54,7 +55,6 @@ add_message_files(
    arduino_input.msg
    PID_gains.msg
    PID_motors_gains.msg
-   Pose2DStamped.msg
  )
 
 ## Generate services in the 'srv' folder

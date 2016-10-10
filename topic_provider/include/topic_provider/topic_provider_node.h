@@ -11,7 +11,7 @@
 
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
-#include <arduino_mr/Pose2DStamped.h>
+#include <mrpt_msgs/Pose2DStamped.h>
 #include <nav_msgs/Odometry.h>
 
 #include <mrpt_bridge/mrpt_bridge.h>
@@ -71,7 +71,7 @@ public:
 	 * topic.
 	 *
 	 */
-	void sniffOdom(const arduino_mr::Pose2DStamped::ConstPtr& ros_odom);
+	void sniffOdom(const mrpt_msgs::Pose2DStamped::ConstPtr& ros_odom);
 	/**\brief Establish a TCP socket connection with the first incoming (most
 	 * probably an MRPT) node.
 	 *

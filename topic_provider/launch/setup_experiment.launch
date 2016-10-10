@@ -17,125 +17,27 @@ Communication with the arduino is achived via a /dev device.
 
 	<!-- LAUNCH ARGUMENTS -->
 	<!-- ************************************* -->
-
-	<!-- Hokuyo Laser Scanner -->
-	<arg
-		name="hokuyo_port"
-		default="/dev/ttyACM1"
-		>
-	</arg>
-	<arg
-		name="scan_topic"
-		default="/scan"
-		>
-	</arg>
-
-	<!-- Arduino configuration -->
-	<arg
-		name="arduino_port"
-		default="/dev/ttyACM0"
-		>
-	</arg>
-
-	<!-- Joystick configuration -->
-	<arg
-		name="joystick_port"
-		default="/dev/input/js0"
-		>
-	</arg>
-
-	<!-- Miscellaneous args -->
-	<arg
-		name="output"
-		default="screen"
-		>
-	</arg>
-	<arg
-		name="robot_model"
-		default="2at"
-		>
-	</arg>
+	<arg name="hokuyo_port"   default ="/dev/ttyACM1" />
+	<arg name="scan_topic"    default ="/scan" />
+	<arg name="arduino_port"  default ="/dev/ttyACM0" />
+	<arg name="joystick_port" default ="/dev/input/js0" />
+	<arg name="output"        default ="screen" />
+	<arg name="robot_model"   default ="2at" />
 
 
-  <!-- LAUNCH PARAMETERS -->
+    <!-- LAUNCH PARAMETERS -->
 	<!-- ************************************* -->
-
-	<!-- Hokuyo Laser Scanner -->
-	<param
-		name="/hokuyo_node/port"
-		value="$(arg hokuyo_port)"
-		>
-	</param>
-
-	<!-- Joystick configuration -->
-	<param
-		name="joy_node/dev"
-		value="$(arg joystick_port)"
-		>
-	</param>
-
-	<!-- Arduino configuration -->
-	<param
-		name="arduino/port"
-		value="$(arg arduino_port)"
-		>
-	</param>
-
-    <!-- Miscellaneous parameters -->
-
-	<param
-	    name="/use_sim_time"
-	    value="false"
-	    type="bool"
-	    >
-	</param>
-
+	<param name="/hokuyo_node/port" value ="$(arg hokuyo_port)"   />
+	<param name="joy_node/dev"      value ="$(arg joystick_port)" />
+	<param name="arduino/port"      value ="$(arg arduino_port)"  />
+	<param name="/use_sim_time"     value ="false" type="bool"    />
 
 	<!-- NODES TO BE LAUNCHED -->
 	<!-- ************************************* -->
-
-	<!-- Hokuyo Laser Scanner -->
-	<node
-		pkg="hokuyo_node"
-		type="hokuyo_node"
-		name="hokuyo_node"
-		args="/scan:=$(arg scan_topic)"
-		>
-	</node>
-
-	<!-- Arduino configuration -->
-	<node
-		pkg="arduino_mr"
-		type="pioneer_$(arg robot_model).py"
-		name="pioneer_$(arg robot_model)"
-		output="$(arg output)"
-		>
-	</node>
-
-	<!-- Joystick configuration -->
-	<node
-		pkg="joy"
-		type="joy_node"
-		name="joy_node"
-		output="$(arg output)"
-		>
-	</node>
-	<node
-		pkg="joy_to_arduino"
-		type="teleop_MR_2at"
-		name="teleop_MR_2at"
-		output="$(arg output)"
-		>
-	</node>
-
-	<!-- Rosbag Recordings-->
-	<node
-		pkg="rosbag"
-		type="record"
-		name="rosbag_recorder"
-		args="--all -O records.bag"
-		output="$(arg output)"
-		>
-	</node>
+	<node pkg="hokuyo_node"    type ="hokuyo_node"                   name ="hokuyo_node"   output ="$(arg output )" args="/scan:=$(arg scan_topic)"/>
+	<node pkg="arduino_mr"     type ="pioneer_$(arg robot_model).py" name ="pioneer_$(arg robot_model)" output ="$(arg output )" />
+	<node pkg="joy"            type ="joy_node"                      name ="joy_node" output ="$(arg output )" />
+	<node pkg="joy_to_arduino" type ="teleop_MR_2at"                 name ="teleop_MR_2at" output ="$(arg output )" />
+	<node pkg="rosbag"         type ="record"                        name ="rosbag_recorder" output ="$(arg output )" args="--all -O records.bag" />
 
 </launch>
