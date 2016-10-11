@@ -7,3 +7,6 @@
 [submodule "mrpt_slam"]
 	path = mrpt_slam
 	url = https://github.com/bergercookie/mrpt_slam
+[submodule "mrpt_navigation"]
+	path = mrpt_navigation
+	url = https://github.com/bergercookie/mrpt_navigation
