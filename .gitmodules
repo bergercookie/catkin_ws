@@ -10,3 +10,6 @@
 [submodule "mrpt_navigation"]
 	path = mrpt_navigation
 	url = https://github.com/bergercookie/mrpt_navigation
+[submodule "libuvc_ros"]
+	path = libuvc_ros
+	url = https://github.com/ktossell/libuvc_ros
