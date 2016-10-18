@@ -10,3 +10,6 @@
 [submodule "mrpt_navigation"]
 	path = mrpt_navigation
 	url = https://github.com/bergercookie/mrpt_navigation
+[submodule "geometry_tutorials"]
+	path = geometry_tutorials
+	url = https://github.com/ros/geometry_tutorials
