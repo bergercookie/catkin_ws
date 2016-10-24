@@ -13,3 +13,12 @@
 [submodule "geometry_tutorials"]
 	path = geometry_tutorials
 	url = https://github.com/ros/geometry_tutorials
+[submodule "libuvc_ros"]
+	path = libuvc_ros
+	url = https://github.com/ktossell/libuvc_ros
+[submodule "p2os"]
+	path = p2os
+	url = https://github.com/allenh1/p2os.git
+[submodule "urdf_tutorial"]
+	path = urdf_tutorial
+	url = https://github.com/ros/urdf_tutorial.git
