@@ -9,10 +9,10 @@ find_package(catkin REQUIRED COMPONENTS
   joy
   roscpp
   rospy
-)
+  sensor_msgs
+  )
 
-catkin_package(
-)
+catkin_package(CATKIN_DEPENDS)
 
 ###########
 ## Build ##
@@ -22,10 +22,11 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   ${catkin_INCLUDE_DIRS}
-)
+  )
 
 ## Declare a cpp executable
-add_executable(teleop_MR_2at teleop_MR_2at.cpp)
+add_executable(teleop_MR_2at
+    src/teleop_MR_2at.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes

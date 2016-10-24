@@ -7,46 +7,44 @@ class Teleop_MR
 {
 public:
 	Teleop_MR();
-	
+
 private:
 	void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
-	
+
 	ros::NodeHandle nh_;
 
 	int l_scale_=1.1, a_scale_=1.1, scale_PWM_=255;
 	int current_mode=1;
 	ros::Publisher vel_pub_;
 	ros::Subscriber joy_sub_;
-	
+
 };
 
 Teleop_MR::Teleop_MR()
 {
-	
-	vel_pub_ = nh_.advertise<arduino_feedback::arduino_input>("arduino_input",3);
-	
+
+	vel_pub_ = nh_.advertise<arduino_feedback::arduino_input>("arduino_input_2at", 3);
+
 	joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 10, &Teleop_MR::joyCallback, this);
-	
+
 }
 
 void Teleop_MR::joyCallback(const sensor_msgs::Joy:ConstPtr& joy)
 {
-	// find the mode, the joystick is running on
 	arduino_feedback::arduino_input message;
-	if (joy.button[1]==true) {
+	if (joy.button[1]==true){
 		message.mode=1;
 		current_mode=1;
 	}
-	if (joy.button[2]==true) {
+	else if (joy.button[2]==true) {
 		message.mode=2;
 		current_mode=2;
 	}
-	if (joy.button[3]==true) {
+	else if (joy.button[3]==true) {
 		message.mode=3;
 		current_mode=3;
 	}
-	
-	// Having set the mode specify the respective quantities
+
 	if (current_mode == 1) {
 		message.linear = l_scale_*joy.axes[2];
 		message.angular = a_scale_*joy.axes[1];
@@ -65,7 +63,6 @@ int main(int argc, char** argv)
 {
 	ros::init(argc, argv, "teleop_MR");
 	Teleop_MR teleop_MR;
-	
+
 	ros::spin();
 }
-	
