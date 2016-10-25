@@ -13,3 +13,6 @@
 [submodule "p2os"]
 	path = p2os
 	url = https://github.com/allenh1/p2os.git
+[submodule "youbot_description"]
+	path = youbot_description
+	url = https://github.com/mas-group/youbot_description
