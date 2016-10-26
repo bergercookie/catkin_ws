@@ -19,3 +19,6 @@
 [submodule "csl_mr_slam"]
 	path = csl_mr_slam
 	url = https://github.com/bergercookie/csl_mr_slam.git
+[submodule "urg_node"]
+	path = urg_node
+	url = https://github.com/ros-drivers/urg_node
