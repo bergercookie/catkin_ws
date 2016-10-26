@@ -22,3 +22,6 @@
 [submodule "urg_node"]
 	path = urg_node
 	url = https://github.com/ros-drivers/urg_node
+[submodule "urg_c"]
+	path = urg_c
+	url = https://github.com/ros-drivers/urg_c
