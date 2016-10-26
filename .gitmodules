@@ -16,3 +16,6 @@
 [submodule "youbot_description"]
 	path = youbot_description
 	url = https://github.com/mas-group/youbot_description
+[submodule "csl_mr_slam"]
+	path = csl_mr_slam
+	url = https://github.com/bergercookie/csl_mr_slam.git
