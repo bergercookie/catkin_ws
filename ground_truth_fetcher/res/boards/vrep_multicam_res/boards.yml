@@ -1,0 +1,10 @@
+%YAML:1.0
+ar_sys_boards:
+   - { name:"/mf0", path:"board_mf0.yml", marker_size:0.3 }
+   - { name:"/mf1", path:"board_mf1.yml", marker_size:0.3 }
+   - { name:"/mf2", path:"board_mf2.yml", marker_size:0.3 }
+#   - { name:"/mf3", path:"board_mf3.yml", marker_size:0.3 }
+#   - { name:"/mf4", path:"board_mf4.yml", marker_size:0.3 }
+   - { name:"/mf5", path:"board_mf5.yml", marker_size:0.35 }
+   - { name:"/mf6", path:"board_mf6.yml", marker_size:0.35 }
+#  - { name:"/mf7", path:"board_mf7.yml", marker_size:0.3 }

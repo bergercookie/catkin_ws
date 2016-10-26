@@ -1,0 +1,141 @@
+#!/usr/bin/env python  
+import roslib
+roslib.load_manifest('multirobot_control')
+
+import rospy
+import tf
+import tf2_ros
+from geometry_msgs.msg import *
+
+#[-0.421, -0.254, 0.018]
+
+def handle_mf_pose(msg):
+    br = tf2_ros.TransformBroadcaster()
+    br.sendTransform(msg)
+
+def handle_mf3_pose(msg):
+    br = tf2_ros.TransformBroadcaster()
+    msg.child_frame_id = 'mf3'
+    br.sendTransform(msg)
+
+def handle_mf4_pose(msg):
+    br = tf2_ros.TransformBroadcaster()
+    msg.child_frame_id = 'mf4'
+    br.sendTransform(msg)
+
+
+def handle_Vision_sensor():
+    br = tf2_ros.TransformBroadcaster()
+
+    #Vision Sensor (top left camera) 
+    tVisionSensor = geometry_msgs.msg.TransformStamped()
+    tVisionSensor.header.stamp = rospy.Time.now()
+    tVisionSensor.header.frame_id = "/world"
+    tVisionSensor.child_frame_id = "/Vision_sensor"
+    tVisionSensor.transform.translation.x = 0.361#-0.06
+    tVisionSensor.transform.translation.y = 1.224#0.97
+    tVisionSensor.transform.translation.z = 2.762#2.78
+    
+    tVisionSensor.transform.rotation.x = 1.0
+    tVisionSensor.transform.rotation.y = 0.0
+    tVisionSensor.transform.rotation.z = 0.0
+    tVisionSensor.transform.rotation.w = 0.0
+    br.sendTransform(tVisionSensor)
+
+def handle_Vision_sensor0():
+    br = tf2_ros.TransformBroadcaster()
+
+    #Vision Sensor 0 (top right camera)
+    tVisionSensor0 = geometry_msgs.msg.TransformStamped()
+    tVisionSensor0.header.stamp = rospy.Time.now()
+    tVisionSensor0.header.frame_id = "/world"
+    tVisionSensor0.child_frame_id = "/Vision_sensor0"
+    tVisionSensor0.transform.translation.x = 0.421#0.0
+    tVisionSensor0.transform.translation.y = -0.696#-0.95
+    tVisionSensor0.transform.translation.z = 2.822#2.84
+    
+    tVisionSensor0.transform.rotation.x = 1.0
+    tVisionSensor0.transform.rotation.y = 0.0
+    tVisionSensor0.transform.rotation.z = 0.0
+    tVisionSensor0.transform.rotation.w = 0.0
+    br.sendTransform(tVisionSensor0)
+
+def handle_youbot0_static():
+    br = tf2_ros.TransformBroadcaster()
+
+    #Youbot0
+    tYoubot0 = geometry_msgs.msg.TransformStamped()
+    tYoubot0.header.stamp = rospy.Time.now()
+    tYoubot0.header.frame_id = "/mf2"
+    tYoubot0.child_frame_id = "/youbot0"
+    tYoubot0.transform.translation.x = 0.18
+    tYoubot0.transform.translation.y = 0.0
+    tYoubot0.transform.translation.z = 0.0
+    
+    tYoubot0.transform.rotation.x = 0.0
+    tYoubot0.transform.rotation.y = 0.0
+    tYoubot0.transform.rotation.z = 0.0
+    tYoubot0.transform.rotation.w = 1.0
+    br.sendTransform(tYoubot0)
+
+def handle_youbot_static():
+    br = tf2_ros.TransformBroadcaster()
+
+    #Youbot0
+    tYoubot = geometry_msgs.msg.TransformStamped()
+    tYoubot.header.stamp = rospy.Time.now()
+    tYoubot.header.frame_id = "/mf1"
+    #tYoubot.header.frame_id = "/mf7"
+    tYoubot.child_frame_id = "/youbot"
+    tYoubot.transform.translation.x = 0.18
+    tYoubot.transform.translation.y = 0.0
+    tYoubot.transform.translation.z = 0.0
+    
+    tYoubot.transform.rotation.x = 0.0
+    tYoubot.transform.rotation.y = 0.0
+    tYoubot.transform.rotation.z = 0.0
+    tYoubot.transform.rotation.w = 1.0
+    br.sendTransform(tYoubot)
+
+def handle_mobile_static():
+    br = tf2_ros.TransformBroadcaster()
+
+    #Youbot0
+    tmobile = geometry_msgs.msg.TransformStamped()
+    tmobile.header.stamp = rospy.Time.now()
+    tmobile.header.frame_id = "/mf0"
+    tmobile.child_frame_id = "/mobile"
+    tmobile.transform.translation.x = 0.175
+    tmobile.transform.translation.y = 0.0
+    tmobile.transform.translation.z = 0.0
+    
+    tmobile.transform.rotation.x = 0.0
+    tmobile.transform.rotation.y = 0.0
+    tmobile.transform.rotation.z = 0.0
+    tmobile.transform.rotation.w = 1.0
+    br.sendTransform(tmobile)
+
+
+if __name__ == '__main__':
+    rospy.init_node('multirobot_tf2_broadcaster')
+
+    # Create Subscriber
+    rospy.Subscriber("/ar_multi_boards_top_left/transform", TransformStamped, handle_mf_pose)
+    rospy.Subscriber("/ar_multi_boards_top_right/transform", TransformStamped, handle_mf_pose)
+    rospy.Subscriber("/ar_single_board_mf4/transform", TransformStamped, handle_mf4_pose)
+    rospy.Subscriber("/ar_single_board_mf3/transform", TransformStamped, handle_mf3_pose)
+
+
+    rate = rospy.Rate(30.0)
+    
+    
+    while not rospy.is_shutdown():
+        #Static Transformations
+        handle_Vision_sensor()
+        handle_Vision_sensor0()
+        handle_youbot0_static()
+        handle_youbot_static()
+        handle_mobile_static()
+        
+        
+        rate.sleep()

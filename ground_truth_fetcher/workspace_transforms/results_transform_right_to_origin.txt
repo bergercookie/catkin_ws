@@ -1,0 +1,2 @@
+translation.z	translation.x	translation.y	rotation.w	rotation.z	rotation.x	rotation.y	
+2.84594372	-0.44225105	-0.66875798	0.05405621	0.00938969	0.99846558	-0.00614078	
