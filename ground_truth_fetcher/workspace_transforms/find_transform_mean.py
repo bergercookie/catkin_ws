@@ -1,4 +1,4 @@
-#usr/bin/env python
+#!/usr/bin/env python
 
 """
 Wed Oct 26 17:06:25 EEST 2016, Nikos Koukis
@@ -16,6 +16,7 @@ import os
 
 if len(sys.argv) != 2:
     print("Illegal number of arguments. Exiting...")
+    sys.exit(0)
 
 fname = sys.argv[1]
 assert(os.path.isfile(fname))

@@ -6,6 +6,9 @@ Compute the transformation of the roof cameras wrt the workspace origin.
 
 """
 
+import re
+import os
+
 import rospy
 import tf
 import tf2_ros
@@ -51,16 +54,12 @@ class MultiRobotBroadcaster:
         trans.header.seq = self.seq
 
         trans.child_frame_id = self.lcamera_frame_ID
-
-        trans.transform.translation.x = 0.38970197
-        trans.transform.translation.y = 0.35614557
-        trans.transform.translation.z = 2.85212646
-
-        trans.transform.rotation.x = -0.70526475
-        trans.transform.rotation.y = 0.70832277
-        trans.transform.rotation.z = -0.02660438
-        trans.transform.rotation.w = 0.00932528
-
+        self._parseResultsFile(
+            os.path.join(
+                os.path.dirname(__file__),
+                "../workspace_transforms/results_transform_left_to_origin.txt"),
+            trans.transform)
+        print "Transformation left_camera => origin:\n", trans.transform
         self.lcamera_to_origin_tf = trans
 
         # origin => right_camera 
@@ -72,15 +71,12 @@ class MultiRobotBroadcaster:
 
         trans.child_frame_id = self.rcamera_frame_ID
 
-        trans.transform.translation.x = -0.44225105
-        trans.transform.translation.y = -0.66875798
-        trans.transform.translation.z = 2.84594372
-
-        trans.transform.rotation.x = 0.99846558
-        trans.transform.rotation.y = -0.00614078
-        trans.transform.rotation.z = 0.00938969
-        trans.transform.rotation.w = 0.05405621
-
+        self._parseResultsFile(
+            os.path.join(
+                os.path.dirname(__file__),
+                "../workspace_transforms/results_transform_right_to_origin.txt"),
+            trans.transform)
+        print "Transformation right_camera => origin:\n", trans.transform
         self.rcamera_to_origin_tf = trans
 
 
@@ -93,6 +89,23 @@ class MultiRobotBroadcaster:
 
     def _sendRCameraOriginTransform(self):
         self._broadcaster.sendTransform(self.rcamera_to_origin_tf)
+
+    def _parseResultsFile(self, results_fname, transform):
+        assert(os.path.isfile(results_fname))
+        with open(results_fname) as f:
+            lines = f.readlines()
+            print "contents are: ", lines
+            assert(len(lines) == 2)
+
+            header, vals = lines
+            header = re.split(r"\t+", header.rstrip("\t\n"))
+            vals = re.split(r"\t+", vals.rstrip("\t"))
+            print "headers are: ", header
+            print "vals are: ", vals
+
+            for i in range(len(header)):
+                exec("transform.{h} = float({v})".format(h=header[i],
+                                                         v=vals[i]))
 
 
     def run(self):
@@ -117,6 +130,6 @@ def main():
     br.run()
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
 
