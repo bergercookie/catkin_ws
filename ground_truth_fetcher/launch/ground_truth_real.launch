@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<!--
+     Launch the necessary nodes to track the robot onboard aruco markers
+-->
+
+<launch>
+    <arg name="gt_marker_ID" default="mf7" />
+    <param name="/gt_marker_ID" value="$(gt_marker_ID)" />
+
+    <node name="monitor_gt_paths" pkg="ground_truth_fetcher" type="monitor_gt_paths.py" />
+
+
+</launch>
