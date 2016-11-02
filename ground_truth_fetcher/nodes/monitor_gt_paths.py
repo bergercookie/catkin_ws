@@ -6,7 +6,8 @@ from nav_msgs.msg import Path
 import tf2_geometry_msgs
 import tf2_ros
 import os
-from transformations import euler_from_quaternion
+from tf.transformations import euler_from_quaternion
+import numpy as np
 
 """
 Publish the path of an arbitrary marker wrt the world frame and the static
@@ -16,6 +17,7 @@ class GroundTruthMonitor():
     def __init__(self):
         """Initialize class instance."""
 
+        self.gt_ns = "ground_truth"
         self._getROSServerParameters()
 
         self.seq = 0
@@ -27,12 +29,8 @@ class GroundTruthMonitor():
 
         self.rate = rospy.Rate(10.0)
 
-        # nav_msgs.Paths that are to be compared - The goal is that they are
-        # identical
-        ros_start_time = rospy.Time.now()
-
         # marker_ID => marker path wrt the workspace origin marker
-        # (stat_marker_ID)
+        # (stat_marker_frame_ID)
         self.gt_paths = {}
         # marker_ID => message sequence in their corresponding paths
         self.gt_path_msg_seqs = {}
@@ -48,14 +46,12 @@ class GroundTruthMonitor():
         self.tf_buffer = tf2_ros.Buffer()
         self._listener = tf2_ros.TransformListener(self.tf_buffer)
 
-        self.gt_ns = "ground_truth"
-
         self._initSubscribersPublishers()
 
     def _initMarkerPath(self, marker_ID):
         """Initialize a marker id path for each one of newly found markers.
         
-        Ignore only the stat_marker_ID that is to show the origin.
+        Ignore only the stat_marker_frame_ID that is to represent the origin.
         """
         print("Initializing a new messages path, for marker_ID \"{}\"".format(
             marker_ID))
@@ -133,26 +129,33 @@ class GroundTruthMonitor():
             marker_ID, fname))
         with open(fname, "w") as f:
             poses_to_save = self.gt_paths[marker_ID].poses
-            for header, pose in poses_to_save:
-                orientation_3d_euler = euler_from_quaternion(pose.orientation)
+            poses_to_save = [poses_to_save[index] for index in range(
+                0, len(poses_to_save), 10)]
+            for a_pose_stamped in poses_to_save:
+                quaternion = a_pose_stamped.pose.orientation
+                q = np.array(
+                    [quaternion.x, quaternion.y, quaternion.z, quaternion.w],
+                    dtype=np.float64, copy=True)
+                orientation_3d_euler = euler_from_quaternion(q)
 
                 f.write("{time} {x} {y} {theta}\n".format(
-                    time=header.stamp,
-                    x=pose.point.x, 
-                    y=pose.point.y, 
+                    time=a_pose_stamped.header.stamp,
+                    x=a_pose_stamped.pose.position.x, 
+                    y=a_pose_stamped.pose.position.y, 
                     theta=orientation_3d_euler[-1] # Yaw
                 ))
 
     def _getROSServerParameters(self):
         """
-        Read the necessary for the current node parameters fromthe ROS
+        Read the necessary for the current node parameters from the ROS
         parameter server
         
         """
 
-        # Static frame ID
-        assert rospy.has_param("/gt_marker_ID"), "{} doesn't exist. Please set this first and rerun node. Exiting...\n".format("mf7")
-        self.stat_marker_frame_ID = rospy.get_param("/gt_marker_ID")
+        # Fetch the origin marker
+        origin_marker_ID_param = "{}/origin_marker_ID".format(self.gt_ns)
+        assert rospy.has_param(origin_marker_ID_param), "{} doesn't exist. Please set this first and rerun node.  Exiting...\n".format(origin_marker_ID_param)
+        self.stat_marker_frame_ID = rospy.get_param(origin_marker_ID_param)
         self.stat_marker_frame_ID.lstrip("\\")
         assert(self.stat_marker_frame_ID[0:2] == "mf")
 

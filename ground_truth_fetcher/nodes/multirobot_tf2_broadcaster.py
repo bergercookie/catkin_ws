@@ -12,11 +12,15 @@ import os
 import rospy
 import tf2_ros
 from geometry_msgs.msg import TransformStamped
+from math import sqrt
 
 
 class MultiRobotBroadcaster:
     def __init__(self):
         self._broadcaster = tf2_ros.TransformBroadcaster()
+
+        self.gt_ns = "ground_truth"
+        self._getROSServerParameters()
 
         self.world_frame_ID = "/world"
         self.lcamera_frame_ID = "/left_camera"
@@ -32,9 +36,9 @@ class MultiRobotBroadcaster:
 
     def _initSubscribersPublishers(self):
         rospy.Subscriber(self.lcamera_ns + "transform",
-                         TransformStamped, self._handleIncomingTF)
+                         TransformStamped, self._handleIncomingTransform)
         rospy.Subscriber(self.rcamera_ns + "transform",
-                         TransformStamped, self._handleIncomingTF)
+                         TransformStamped, self._handleIncomingTransform)
 
     def _initStaticTransformationProps(self):
         """DO NOT USE
@@ -80,14 +84,63 @@ class MultiRobotBroadcaster:
         print "Transformation right_camera => origin:\n", trans.transform
         self.rcamera_to_origin_tf = trans
 
+    def _getROSServerParameters(self):
+        """
+        Read the necessary for the current node parameters from the ROS
+        parameter server
+        
+        """
 
-    def _handleIncomingTF(self, incoming_tf):
-        """Send to the TF topic the incoming geometry_msgs.TransformStamped."""
-        self._broadcaster.sendTransform(incoming_tf)
+        # Fetch the origin marker
+        origin_marker_ID_param = "{}/origin_marker_ID".format(self.gt_ns)
+        assert rospy.has_param(origin_marker_ID_param), "{} doesn't exist. Please set this first and rerun node.  Exiting...\n".format(origin_marker_ID_param)
+        self.stat_marker_frame_ID = rospy.get_param(origin_marker_ID_param)
+        self.stat_marker_frame_ID.lstrip("\\")
+        assert(self.stat_marker_frame_ID[0:2] == "mf")
 
-        # TODO
-        # Take the opposite transform so that your tf tree can have a global
-        # "/world" start
+    def _handleIncomingTransform(self, incoming_tf):
+        """Send to the TF topic the incoming geometry_msgs.TransformStamped.
+        
+        Make sure that the origin marker_ID is the parent of the camera frames
+        by reversing the child and parent frames in case the origin marker is
+        involved in the transformation
+
+        """
+
+        if incoming_tf.child_frame_id == self.stat_marker_frame_ID:
+            # Basic data are the same
+            outgoing_tf = TransformStamped()
+            outgoing_tf.header.seq = incoming_tf.header.seq
+            outgoing_tf.header.stamp = incoming_tf.header.stamp
+
+            # Stap the parent and child frames
+            outgoing_tf.child_frame_id = incoming_tf.header.frame_id
+            outgoing_tf.header.frame_id = incoming_tf.child_frame_id
+
+            # Translation
+            outgoing_tf.transform.translation = incoming_tf.transform.translation
+            outgoing_tf.transform.rotation = incoming_tf.transform.rotation
+
+            # # Inverse of transform
+            # outgoing_tf.transform.translation.x = -incoming_tf.transform.translation.x
+            # outgoing_tf.transform.translation.y = -incoming_tf.transform.translation.y
+            # outgoing_tf.transform.translation.z = -incoming_tf.transform.translation.z
+
+            # Rotation
+            # magn = sqrt(incoming_tf.transform.rotation.x ** 2 +
+                        # incoming_tf.transform.rotation.y ** 2 +
+                        # incoming_tf.transform.rotation.z ** 2 +
+                        # incoming_tf.transform.rotation.w ** 2)
+            # outgoing_tf.transform.rotation.x = -incoming_tf.transform.rotation.x / magn
+            # outgoing_tf.transform.rotation.y = -incoming_tf.transform.rotation.y / magn
+            # outgoing_tf.transform.rotation.z = -incoming_tf.transform.rotation.z / magn
+            # outgoing_tf.transform.rotation.w = incoming_tf.transform.rotation.w / magn
+
+        else:
+            outgoing_tf = incoming_tf
+
+
+        self._broadcaster.sendTransform(outgoing_tf)
 
     # def _sendLCameraOriginTransform(self):
         # self._broadcaster.sendTransform(self.lcamera_to_origin_tf)
