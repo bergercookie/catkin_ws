@@ -28,3 +28,9 @@
 [submodule "laser_proc"]
 	path = laser_proc
 	url = https://github.com/ros-perception/laser_proc
+[submodule "roslint"]
+	path = roslint
+	url = ./roslint/
+[submodule "teleop_twist_joy"]
+	path = teleop_twist_joy
+	url = ./teleop_twist_joy/
