@@ -11,8 +11,8 @@
 
     <param name="$(arg gt_ns)/origin_marker_ID" value="$(arg origin_marker_ID)" />
 
-		<!-- Initialize roof cameras -->
-		<include file="$(arg plumb_dir)/setup_roof_cameras.launch"/>
+	<!-- Initialize roof cameras -->
+	<include file="$(arg plumb_dir)/setup_roof_cameras.launch"/>
 
     <!-- Track the markers' paths -->
     <node name="monitor_gt_paths" pkg="ground_truth_fetcher" type="monitor_gt_paths.py" />

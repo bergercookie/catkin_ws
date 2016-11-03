@@ -12,7 +12,8 @@ import os
 import rospy
 import tf2_ros
 from geometry_msgs.msg import TransformStamped
-from math import sqrt
+
+# TODO - cleanup the origin code?
 
 
 class MultiRobotBroadcaster:
@@ -22,9 +23,9 @@ class MultiRobotBroadcaster:
         self.gt_ns = "ground_truth"
         self._getROSServerParameters()
 
-        self.world_frame_ID = "/world"
-        self.lcamera_frame_ID = "/left_camera"
-        self.rcamera_frame_ID = "/right_camera"
+        self.world_frame_ID = "world" # UNUSED - TODO: Remove it?
+        self.lcamera_frame_ID = "left_camera"
+        self.rcamera_frame_ID = "right_camera"
 
         self.lcamera_ns = "/ar_multi_boards_top_left/"
         self.rcamera_ns = "/ar_multi_boards_top_right/"
@@ -95,7 +96,7 @@ class MultiRobotBroadcaster:
         origin_marker_ID_param = "{}/origin_marker_ID".format(self.gt_ns)
         assert rospy.has_param(origin_marker_ID_param), "{} doesn't exist. Please set this first and rerun node.  Exiting...\n".format(origin_marker_ID_param)
         self.stat_marker_frame_ID = rospy.get_param(origin_marker_ID_param)
-        self.stat_marker_frame_ID.lstrip("\\")
+        self.stat_marker_frame_ID.lstrip("/")
         assert(self.stat_marker_frame_ID[0:2] == "mf")
 
     def _handleIncomingTransform(self, incoming_tf):
@@ -121,6 +122,7 @@ class MultiRobotBroadcaster:
             outgoing_tf.transform.translation = incoming_tf.transform.translation
             outgoing_tf.transform.rotation = incoming_tf.transform.rotation
 
+            # TODO - remove these?
             # # Inverse of transform
             # outgoing_tf.transform.translation.x = -incoming_tf.transform.translation.x
             # outgoing_tf.transform.translation.y = -incoming_tf.transform.translation.y
