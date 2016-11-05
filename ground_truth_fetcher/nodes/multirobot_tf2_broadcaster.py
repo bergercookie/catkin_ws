@@ -26,12 +26,13 @@ class MultiRobotBroadcaster:
         self.lcamera_ns = "/ar_multi_boards_top_left/"
         self.rcamera_ns = "/ar_multi_boards_top_right/"
 
-        self.seq = 0
-
         self._init_subscribers_publishers()
-        # self._initStaticTransformationProps()
 
     def _init_subscribers_publishers(self):
+        """Subscribe to the transforms as published by ArSys and push them to
+        the /tf topic.
+
+        """
         rospy.Subscriber(self.lcamera_ns + "transform",
                          TransformStamped, self._handle_incoming_transform)
         rospy.Subscriber(self.rcamera_ns + "transform",
@@ -40,7 +41,7 @@ class MultiRobotBroadcaster:
     def _get_ros_server_parameters(self):
         """
         Read the necessary for the current node parameters from the ROS
-        parameter server
+        parameter server.
 
         """
 
@@ -60,6 +61,8 @@ class MultiRobotBroadcaster:
 
         """
 
+        # Revert the frame IDs so that the stat_marker_frame_ID is the
+        # top-level frame
         if incoming_tf.child_frame_id == self.stat_marker_frame_ID:
             # Basic data are the same
             outgoing_tf = TransformStamped()
@@ -93,6 +96,7 @@ def main():
     rospy.init_node(node_name)
 
     br = MultiRobotBroadcaster()
+    print("{}: Initialized!".format(node_name))
     br.run()
 
 

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<!--
+
+Launch the necessary nodes to track the robot onboard aruco markers using
+image topics from a prerecorded rosbag. It is assumed that the rosbag is
+played prior to the execution of this file.
+
+-->
+
+<launch>
+  <arg name="plumb_dir" value="$(find csl_hw_setup)/launch/plumbing" />
+  <arg name="origin_marker_ID" default="mf7" />
+  <arg name="gt_ns" default="/ground_truth" />
+  <arg name="output" value="$(env MR_OUTPUT_MESSAGES_TO)" />
+
+  <param name="$(arg gt_ns)/origin_marker_ID" value="$(arg origin_marker_ID)" />
+
+  <!-- Track the markers' paths -->
+  <node name="monitor_gt_paths" pkg="ground_truth_fetcher" type="monitor_gt_paths.py" output="$(arg output)"/>
+</launch>
