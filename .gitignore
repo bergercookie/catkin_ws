@@ -41,3 +41,4 @@ Thumbs.db
 topic_provider/rosbags
 
 *test*
+ground_truth_fetcher/datasets/
