@@ -1,7 +1,0 @@
-int32 mode
-int32 rotationR
-int32 rotationL
-int32 pwm_to_motorR
-int32 pwm_to_motorL
-int32 looptime
-int32 linear_distance
