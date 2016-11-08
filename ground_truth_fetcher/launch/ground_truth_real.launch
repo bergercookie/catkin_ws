@@ -11,9 +11,10 @@
   <arg name="gt_ns" default="/ground_truth" />
 
   <param name="$(arg gt_ns)/origin_marker_ID" value="$(arg origin_marker_ID)" />
+  <param name="/ground_truth_ns" value="$(arg gt_ns)" />
 
-	<!-- Initialize roof cameras -->
-	<include file="$(arg plumb_dir)/setup_roof_cameras.launch"/>
+  <!-- Initialize roof cameras -->
+  <include file="$(arg plumb_dir)/setup_roof_cameras.launch"/>
   <!-- Track the markers' paths -->
   <node name="monitor_gt_paths" pkg="ground_truth_fetcher" type="monitor_gt_paths.py" />
 

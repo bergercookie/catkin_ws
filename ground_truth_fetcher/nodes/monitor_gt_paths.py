@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import rospy
 from geometry_msgs.msg import PoseStamped, TransformStamped, Pose
 from nav_msgs.msg import Path
@@ -17,12 +18,12 @@ operates as the global origin
 In a multi-robot setup each robot is supposed to have 2 aruco markers onboard:
 - One for ground-truth validation that faces the roof cameras
 - One that faces up front and is used at inter-robot meetings so that each
-robot knows the relative transformation wrt its counterpart 
+robot knows the relative transformation wrt its counterpart
 
-Algorithm should make use only of the first markers. To solve this the top
-markers should have an *odd* marker ID while  the markers facing up front
-shoudl have an even ID. This way the latter are to be ignored.
-
+Algorithm should make use of of one of these for fetching the ground truth. To
+solve this the top markers should have an *odd* marker ID and the inter-robot
+meetings markers must have *even* marker IDs. This can be modified from the
+configuration file - see  MR_USE_ODD_ARUCO_MARKERS_FOR_GT environment variable
 """
 
 class GroundTruthMonitor():
@@ -56,7 +57,7 @@ class GroundTruthMonitor():
 
     def _init_marker_path(self, marker_ID):
         """Initialize a marker id path for each one of newly found markers.
-        
+
         Ignore only the stat_marker_frame_ID that is to represent the origin.
         """
         rospy.logwarn(
@@ -86,8 +87,8 @@ class GroundTruthMonitor():
         Add a new pose to an existing marker's path, based on the incoming
         transformation to the origin
         """
-        assert(marker_ID in self.gt_paths.keys())
-        assert(marker_ID in self.gt_path_msg_seqs.keys())
+        assert marker_ID in self.gt_paths.keys()
+        assert marker_ID in self.gt_path_msg_seqs.keys()
 
         res = self._lookup_marker_gt_pose(marker_ID,
                                           lookup_duration=1.0)
@@ -101,7 +102,7 @@ class GroundTruthMonitor():
         """
         Utility method that looks up the transformation of a marker_ID to
         the static marker that represents the origin.
-        
+
         If a transformation is successfully found it is returned by the method,
         along with a pose with regards to the static marker ID, otherwise None
         is returned
@@ -140,7 +141,7 @@ class GroundTruthMonitor():
         """
         Start publishing the transformation between the origin and the anchor
         node of a specific SLAM agent.
-        
+
         The anchor is located at the first pose the corresponding marker_ID is
         detected
         """
@@ -150,7 +151,7 @@ class GroundTruthMonitor():
 
         [marker_trans, _] = self._lookup_marker_gt_pose(marker_ID,
                                                         lookup_duration=2.0)
-        assert(marker_trans)
+        assert marker_trans
 
         # change the target frame of the transformation
         marker_trans.child_frame_id = "{}_anchor".format(marker_ID)
@@ -167,8 +168,8 @@ class GroundTruthMonitor():
 
     def _save_marker_path_to_text_file(self, marker_ID):
         """Save the path of a specific marker to a textfile."""
-        assert(marker_ID in self.gt_paths.keys())
-        assert(marker_ID in self.gt_path_msg_seqs.keys())
+        assert marker_ID in self.gt_paths.keys()
+        assert marker_ID in self.gt_path_msg_seqs.keys()
 
         fname = os.path.join(self.gt_trajectories_dirname,
                              "{}_path.txt".format(marker_ID))
@@ -187,8 +188,8 @@ class GroundTruthMonitor():
 
                 f.write("{time} {x} {y} {theta}\n".format(
                     time=a_pose_stamped.header.stamp,
-                    x=a_pose_stamped.pose.position.x, 
-                    y=a_pose_stamped.pose.position.y, 
+                    x=a_pose_stamped.pose.position.x,
+                    y=a_pose_stamped.pose.position.y,
                     theta=orientation_3d_euler[-1] # Yaw
                 ))
 
@@ -196,17 +197,28 @@ class GroundTruthMonitor():
         """
         Read the necessary for the current node parameters from the ROS
         parameter server
-        
+
         """
         # Fetch the name of the ground truth topic namespace
         self.gt_ns = rospy.get_param("/ground_truth_ns")
 
         # Fetch the origin marker
         origin_marker_ID_param = "{}/origin_marker_ID".format(self.gt_ns)
-        assert rospy.has_param(origin_marker_ID_param), "{} doesn't exist. Please set this first and rerun node.  Exiting...\n".format(origin_marker_ID_param)
+        assert rospy.has_param(origin_marker_ID_param),\
+            "\"{}\" doesn't exist. Please set this first and rerun node.  Exiting...\n".format(origin_marker_ID_param)
         self.stat_marker_frame_ID = rospy.get_param(origin_marker_ID_param)
         self.stat_marker_frame_ID.lstrip("/")
-        assert(self.stat_marker_frame_ID[0:2] == "mf")
+        assert self.stat_marker_frame_ID[0:2] == "mf"
+
+        # fetch whether we are tracking odd or even markers
+        track_odd_marker_IDs_param = "{}/track_odd_marker_IDs".format(self.gt_ns)
+        assert rospy.has_param(track_odd_marker_IDs_param), \
+            " \"{}\" doesn't exist. Please set this first and rerun node.  Exiting...\n".format(track_odd_marker_IDs_param)
+
+        self.track_odd_marker_IDs = rospy.get_param(track_odd_marker_IDs_param)
+        rospy.logwarn("Tracking {} markers...".format(
+            "ODD" if self.track_odd_marker_IDs is True else "EVEN"))
+
 
     def _query_registered_frames(self):
         """Get a list of registered so far frames.
@@ -225,13 +237,18 @@ class GroundTruthMonitor():
             # Keep only those that start with mf
             # Ignore the origin
             # Ignore the anchors
-            # Ignore the frames that have an odd ID, these are used for
-            # inter-robot communications
             frames = [a_frame for a_frame in frames
                       if a_frame[0:2] == "mf"
                       and a_frame != self.stat_marker_frame_ID
-                      and not a_frame.endswith("anchor")
-                      and int(a_frame[-1]) % 2 != 1]
+                      and not a_frame.endswith("anchor")]
+            # Ignore the Odd (Or even) markers as each robot has both types of
+            # these on it
+            if self.track_odd_marker_IDs: # Keep the Odd marekrs
+                frames = [a_frame for a_frame in frames if
+                          int(a_frame[-1]) % 2 == 1]
+            else: # Keep the Even markers
+                frames = [a_frame for a_frame in frames if
+                          int(a_frame[-1]) % 2 == 0]
 
             # update the inner counter for registered frames
             self.prev_top_registered_frames = self.top_registered_frames
@@ -260,6 +277,7 @@ class GroundTruthMonitor():
 
 
     def run(self):
+        """Main method in class."""
         while not rospy.is_shutdown():
             # initialize the odometry path of any newly registered frames
             self._query_registered_frames()
@@ -269,7 +287,7 @@ class GroundTruthMonitor():
                 for a_frame in frames_to_add:
                     self._init_marker_path(a_frame)
                     self._init_anchor_publisher(a_frame)
-            
+
             self._refresh_ground_truth_paths()
             self.rate.sleep()
 
