@@ -33,7 +33,7 @@
 	url = https://github.com/ros/roslint
 [submodule "csl_pioneer_drivers"]
 	path = csl_pioneer_drivers
-	url = ./csl_pioneer_drivers/
+	url = git@github.com:bergercookie/csl_pioneer_drivers
 [submodule "teleop_twist_joy"]
 	path = teleop_twist_joy
 	url = git@github.com:bergercookie/teleop_twist_joy
