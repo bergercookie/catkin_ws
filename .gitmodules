@@ -30,7 +30,7 @@
 	url = https://github.com/ros-perception/laser_proc
 [submodule "roslint"]
 	path = roslint
-	url = ./roslint/
+	url = https://github.com/ros/roslint
 [submodule "csl_pioneer_drivers"]
 	path = csl_pioneer_drivers
 	url = ./csl_pioneer_drivers/
