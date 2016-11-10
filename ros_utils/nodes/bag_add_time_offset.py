@@ -29,10 +29,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-
-PKG = 'bag_tools' # this package name
-
-import roslib; roslib.load_manifest(PKG)
 import rospy
 import rosbag
 import os
