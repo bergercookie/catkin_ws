@@ -46,3 +46,6 @@
 [submodule "joystick_drivers"]
 	path = joystick_drivers
 	url = https://github.com/ros-drivers/joystick_drivers
+[submodule "hokuyo_node"]
+	path = hokuyo_node
+	url = https://github.com/ros-drivers/hokuyo_node
