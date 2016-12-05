@@ -43,3 +43,6 @@
 [submodule "ar_sys"]
 	path = ar_sys
 	url = https://github.com/Sahloul/ar_sys
+[submodule "joystick_drivers"]
+	path = joystick_drivers
+	url = https://github.com/ros-drivers/joystick_drivers
