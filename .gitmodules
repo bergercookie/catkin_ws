@@ -37,3 +37,6 @@
 [submodule "teleop_twist_joy"]
 	path = teleop_twist_joy
 	url = git@github.com:bergercookie/teleop_twist_joy
+[submodule "zeroconf_avahi_suite"]
+	path = zeroconf_avahi_suite
+	url = https://github.com/stonier/zeroconf_avahi_suite
