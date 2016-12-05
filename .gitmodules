@@ -40,3 +40,6 @@
 [submodule "zeroconf_avahi_suite"]
 	path = zeroconf_avahi_suite
 	url = https://github.com/stonier/zeroconf_avahi_suite
+[submodule "ar_sys"]
+	path = ar_sys
+	url = https://github.com/Sahloul/ar_sys
