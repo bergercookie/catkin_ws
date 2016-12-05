@@ -43,3 +43,9 @@
 [submodule "hokuyo_node"]
 	path = hokuyo_node
 	url = https://github.com/ros-drivers/hokuyo_node
+[submodule "zeroconf_msgs"]
+	path = zeroconf_msgs
+	url = https://github.com/stonier/zeroconf_msgs
+[submodule "pose_cov_ops"]
+	path = pose_cov_ops
+	url = https://github.com/mrpt-ros-pkg/pose_cov_ops
