@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<launch>
+    <node name="master_discovery" pkg="master_discovery_fkie" type="master_discovery" output="screen"/>
+    <node name="master_sync" pkg="master_sync_fkie" type="master_sync" output="screen"/>
+    <node name="rostopic_sub" pkg="rostopic" type="rostopic" output="screen" args="echo /kalimera" />
+    <node name="rostopic_pub" pkg="rostopic" type="rostopic" output="screen"
+        args="pub /kalinuxta std_msgs/String 'kalinuxta' -r 10" />
+</launch>
+
