@@ -6,10 +6,10 @@
 	url = https://github.com/ros-drivers/rosserial
 [submodule "mrpt_slam"]
 	path = mrpt_slam
-	url = https://github.com/bergercookie/mrpt_slam
+	url = git@github.com:bergercookie/mrpt_slam
 [submodule "mrpt_navigation"]
 	path = mrpt_navigation
-	url = https://github.com/bergercookie/mrpt_navigation
+	url = git@github.com:bergercookie/mrpt_navigation
 [submodule "p2os"]
 	path = p2os
 	url = https://github.com/allenh1/p2os.git
@@ -18,7 +18,7 @@
 	url = https://github.com/mas-group/youbot_description
 [submodule "csl_mr_slam"]
 	path = csl_mr_slam
-	url = https://github.com/bergercookie/csl_mr_slam.git
+	url = git@github.com:bergercookie/csl_mr_slam.git
 [submodule "laser_proc"]
 	path = laser_proc
 	url = https://github.com/ros-perception/laser_proc
