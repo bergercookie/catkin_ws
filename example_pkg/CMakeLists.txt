@@ -5,15 +5,37 @@ project(example_pkg)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  mrpt_bridge
-  mrpt_graphslam_2d
-  roscpp
-  rospy
-  tf2
-  zeroconf_avahi
-  zeroconf_avahi_demos
-  zeroconf_msgs
-)
+    roscpp
+    rospy
+    std_msgs
+    sensor_msgs
+    geometry_msgs
+    nav_msgs
+    mrpt_bridge
+    mrpt_msgs
+    tf
+    tf2
+    multimaster_msgs_fkie
+    )
+## System dependencies are found with CMake's conventions
+find_package(MRPT REQUIRED
+    base
+    gui
+    obs
+    maps
+    opengl
+    graphslam
+    )
+
+#c++ 11 standard
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+IF($ENV{VERBOSE})
+	MESSAGE("CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+endif()
+
+if (MRPT_VERSION VERSION_LESS 2.0.0)
+	set(CMAKE_CXX_FLAGS "-Wno-deprecated-declarations ${CMAKE_CXX_FLAGS}")
+endif()
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -132,17 +154,18 @@ include_directories(
 ## either from message generation or dynamic reconfigure
 # add_dependencies(example_pkg ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-## Declare a C++ executable
-# add_executable(example_pkg_node src/example_pkg_node.cpp)
+# Declare a C++ executable
+add_executable(example_pkg_node src/example_pkg_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(example_pkg_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-## Specify libraries to link a library or executable target against
-# target_link_libraries(example_pkg_node
-#   ${catkin_LIBRARIES}
-# )
+# Specify libraries to link a library or executable target against
+target_link_libraries(example_pkg_node
+  ${MRPT_LIBS}
+	${catkin_LIBRARIES}
+ 	)
 
 #############
 ## Install ##
