@@ -290,7 +290,8 @@ struct ExampleDemoGraphSLAM
 		set<TNodeID> nodes_set;
 
 		for (TNodeID i = 10; i <= 40; ++i) {
-			if (i == 30 || i == 31 || i == 32 || i == 33 || i == 37 || i ==38) {
+			//if (i == 11 || i == 12 || i == 30 || i == 30 || i == 32 || i == 33 || i == 37 || i ==38) {
+			if (i == 11 || i == 12 || i == 28 || i == 29 || i == 31 || i == 32 || i == 33 || i == 37 || i ==38) {
 				continue;
 			}
 			nodes_set.insert(i);
@@ -298,7 +299,7 @@ struct ExampleDemoGraphSLAM
 
 		graph.extractSubGraph(nodes_set,
 				&graph_extracted,
-				/*root_node_in=*/ INVALID_NODEID,
+				/*root_node_in=*/ 30,
 				/*auto_expand_set=*/ false);
 
 		// TODO - deal with colors when extracting subgraph
