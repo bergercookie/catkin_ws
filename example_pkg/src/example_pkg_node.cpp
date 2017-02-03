@@ -22,6 +22,7 @@
 #include <mrpt_msgs/GetCMGraph.h>
 #include <mrpt_bridge/network_of_poses.h>
 #include <iterator>
+#include <ros/ros.h>
 
 using namespace mrpt;
 using namespace mrpt::utils;
@@ -156,13 +157,15 @@ struct ExampleDemoGraphSLAM
 			// Copy the nodes to the graph, and add some noise:
 			graph.nodes[j] = p;
 
-			// modify the sample agent_ID_str field
+			// modify the agent_ID_str field
 			if (j < N_VERTEX/2) {
 				graph.nodes.at(j).agent_ID_str = "desktop_1";
 			}
 			else {
 				graph.nodes.at(j).agent_ID_str = "desktop_2";
 			}
+			// modify the nodeID_loc field
+			graph.nodes.at(j).nodeID_loc = j;
 
 		}
 
@@ -320,6 +323,8 @@ struct ExampleDemoGraphSLAM
 			//cout << "\tnodeID: " << it->first << " => agent_ID_str: " << node_annots->agent_ID_str << endl;
 		//}
 
+		graph.saveToTextFile("graph.graph");
+		graph_extracted.saveToTextFile("extracted_graph.graph");
 
 		//graph.getAs3DObject(gl_graph1, graph_render_params);
 		graph_extracted.getAs3DObject(gl_graph1, graph_render_params);
@@ -345,7 +350,8 @@ struct ExampleDemoGraphSLAM
 	}
 };
 
-int main()
+/** Main function of the mrpt_graphslam condensed-measurements _application */
+int main(int argc, char **argv)
 {
 	try
 	{
