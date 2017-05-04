@@ -52,3 +52,6 @@
 [submodule "camera_umd"]
 	path = camera_umd
 	url = https://github.com/ktossell/camera_umd
+[submodule "rviz_generator"]
+	path = rviz_generator
+	url = git@github.com:bergercookie/rviz_generator
