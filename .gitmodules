@@ -55,3 +55,6 @@
 [submodule "rviz_generator"]
 	path = rviz_generator
 	url = git@github.com:bergercookie/rviz_generator
+[submodule "rosaria"]
+    path = rosaria
+    url = https://github.com/amor-ros-pkg/rosaria
