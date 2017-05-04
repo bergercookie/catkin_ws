@@ -51,4 +51,4 @@
 	url = https://github.com/mrpt-ros-pkg/pose_cov_ops
 [submodule "camera_umd"]
 	path = camera_umd
-	url = ./camera_umd/
+	url = https://github.com/ktossell/camera_umd
