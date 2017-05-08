@@ -6,10 +6,10 @@
 	url = https://github.com/ros-drivers/rosserial
 [submodule "mrpt_slam"]
 	path = mrpt_slam
-	url = git@github.com:bergercookie/mrpt_slam
+	url = https://github.com/bergercookie/mrpt_slam
 [submodule "mrpt_navigation"]
 	path = mrpt_navigation
-	url = git@github.com:bergercookie/mrpt_navigation
+	url = https://github.com/bergercookie/mrpt_navigation
 [submodule "p2os"]
 	path = p2os
 	url = https://github.com/allenh1/p2os.git
@@ -18,7 +18,7 @@
 	url = https://github.com/mas-group/youbot_description
 [submodule "csl_mr_slam"]
 	path = csl_mr_slam
-	url = git@github.com:bergercookie/csl_mr_slam.git
+	url = https://github.com/bergercookie/csl_mr_slam.git
 [submodule "laser_proc"]
 	path = laser_proc
 	url = https://github.com/ros-perception/laser_proc
@@ -27,13 +27,10 @@
 	url = https://github.com/ros/roslint
 [submodule "csl_pioneer_drivers"]
 	path = csl_pioneer_drivers
-	url = git@github.com:bergercookie/csl_pioneer_drivers
+	url = https://github.com/bergercookie/csl_pioneer_drivers
 [submodule "teleop_twist_joy"]
 	path = teleop_twist_joy
-	url = git@github.com:bergercookie/teleop_twist_joy
-[submodule "zeroconf_avahi_suite"]
-	path = zeroconf_avahi_suite
-	url = https://github.com/stonier/zeroconf_avahi_suite
+	url = https://github.com/bergercookie/teleop_twist_joy
 [submodule "ar_sys"]
 	path = ar_sys
 	url = https://github.com/Sahloul/ar_sys
@@ -43,9 +40,6 @@
 [submodule "hokuyo_node"]
 	path = hokuyo_node
 	url = https://github.com/ros-drivers/hokuyo_node
-[submodule "zeroconf_msgs"]
-	path = zeroconf_msgs
-	url = https://github.com/stonier/zeroconf_msgs
 [submodule "pose_cov_ops"]
 	path = pose_cov_ops
 	url = https://github.com/mrpt-ros-pkg/pose_cov_ops
@@ -54,7 +48,7 @@
 	url = https://github.com/ktossell/camera_umd
 [submodule "rviz_generator"]
 	path = rviz_generator
-	url = git@github.com:bergercookie/rviz_generator
+	url = https://github.com/bergercookie/rviz_generator
 [submodule "rosaria"]
     path = rosaria
     url = https://github.com/amor-ros-pkg/rosaria
