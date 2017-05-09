@@ -46,17 +46,14 @@ document](http://147.102.51.10:3000/bergercookie/mr-slam-thesis-text/src/master/
    interested in running graphSLAM in the Gazebo simulator, you probably can go
    for the `ros-jade-desktop` variant.
 
-3. Clone repository of used ROS
-   packages **recursively** (yes, we do use Git submodules).
-   The stable (and fully tested) version of the repository can be found
-   [here](http://controlsystemslab.gr/code/bergercookie/mr_slam_ws) while the
-   up-to-date and more active version
-   [here](https://github.com/bergercookie/catkin_ws)
+3. Clone [repository of used ROS
+   packages](https://github.com/bergercookie/catkin_ws) **recursively** (yes,
+   we do use Git submodules).
 
 ```bash
 
 $ mkdir -p ~/catkin_ws/src # modify this in case of already existing catkin ws
-$ git clone --recursive https://github.com/bergercookie/catkin_ws catkin_ws/src # modify in case you want the stable version
+$ git clone --recursive https://github.com/bergercookie/catkin_ws catkin_ws/src
 
 # in case previous command fails (e.g. due to an internet connection problem)
 # just continue with the setup of submodules:
