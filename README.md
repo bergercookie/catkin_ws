@@ -48,7 +48,7 @@ document](http://147.102.51.10:3000/bergercookie/mr-slam-thesis-text/src/master/
 
 3. Clone [repository of used ROS
    packages](https://github.com/bergercookie/catkin_ws) **recursively** (yes, we
-   do use Git submodules*)
+   do use Git submodules)
 
 ```bash
 
@@ -77,16 +77,14 @@ $ source ~/.bashrc
 
 ```
 
+5. Install required apt packages:
 
-5. Install required apt ackages:
+    The following should be installed in the system for the `catkin_make`
+    compilation to be successful:
 
-The following should be installed for the `catkin_make` compilation to be
-successful:
-
-- libspnav-dev
-- libv4l-dev
-- libaria-dev
-
+    - libspnav-dev
+    - libv4l-dev
+    - libaria-dev
 
 6. Test that the MRPT graphslam-engine application works - Execute using the
    provided sample datasets as described
@@ -94,24 +92,25 @@ successful:
    A sample command to execute would be the following:
 
 ```bash
-$MRPT_DIR/bin/graphslam-engine -i /home/nick/mrpt/share/mrpt/config_files/graphslam-engine/odometry_2DRangeScans.ini -r /home/nick/mrpt/share/mrpt/datasets/graphslam-engine-demos/action_observations_map/simul.rawlog -g /home/nick/mrpt/share/mrpt/datasets/graphslam-engine-demos/action_observations_map/simul.rawlog.GT.txt --2d
+$MRPT_DIR/bin/graphslam-engine \
+    -i $mrpt/share/mrpt/config_files/graphslam-engine/odometry_2DRangeScans.ini \
+    -r $mrpt/share/mrpt/datasets/graphslam-engine-demos/action_observations_map/simul.rawlog
+    -g $mrpt/share/mrpt/datasets/graphslam-engine-demos/action_observations_map/simul.rawlog.GT.txt \
+    --2d
 ```
 
-7. Test that the graphslam-agent ROS wrapper works as expected, again using the provided rosbag:
-
-```bash
-
-$ roslaunch mrpt_graphslam_2d sr_graphslam_demo.launch
-```
+7. Test that the mrpt_graphslam_2d ROS wrapper works as expected, use the
+   instructions provided [in the
+   mrpt_graphslam_2d](http://github.com/bergercookie/mrpt_graphslam_2d)
+   package.
 
 ----------
+
+## Notes
 
 In case you encounter any problem during the aforementioned process or you find
 part of the instructions inaccurate, [open a Github
 issue](https://github.com/bergercookie/catkin_ws/issues)
 
 
-# Running a multi-robot simulation in Gazebo
-
-// TODO - Add it here
 
