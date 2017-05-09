@@ -49,7 +49,7 @@ document](http://147.102.51.10:3000/bergercookie/mr-slam-thesis-text/src/master/
 3. Clone repository of used ROS
    packages **recursively** (yes, we do use Git submodules).
    The stable (and fully tested) version of the repository can be found
-   [here](https://controlsystemslab.gr/code/bergercookie/mr_slam_ws) while the
+   [here](http://controlsystemslab.gr/code/bergercookie/mr_slam_ws) while the
    up-to-date and more active version
    [here](https://github.com/bergercookie/catkin_ws)
 
