@@ -97,7 +97,7 @@ $ source ~/.bashrc
 ```bash
 $MRPT_DIR/bin/graphslam-engine \
     -i $mrpt/share/mrpt/config_files/graphslam-engine/odometry_2DRangeScans.ini \
-    -r $mrpt/share/mrpt/datasets/graphslam-engine-demos/action_observations_map/simul.rawlog
+    -r $mrpt/share/mrpt/datasets/graphslam-engine-demos/action_observations_map/simul.rawlog \
     -g $mrpt/share/mrpt/datasets/graphslam-engine-demos/action_observations_map/simul.rawlog.GT.txt \
     --2d
 ```
