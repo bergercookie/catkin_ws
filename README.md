@@ -66,11 +66,11 @@ $ git submodule update --init
 
 ```bash
 # Initialize this catkin workspace - Link to /opt/*/CMakeLists file
-$ ~/catkin_ws/src$ catkin_init_workspace
+~/catkin_ws/src$ catkin_init_workspace
 
 # Add environment-setting lines in your .bashrc
-$ echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
-$ echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+$ echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc && \
+  echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
 # reload bashrc
 $ source ~/.bashrc
@@ -82,9 +82,15 @@ $ source ~/.bashrc
     The following should be installed in the system for the `catkin_make`
     compilation to be successful:
 
-    - libspnav-dev
-    - libv4l-dev
-    - libaria-dev
+    - `libspnav-dev`
+    - `libv4l-dev`
+    - `libaria-dev`
+
+    In case you don't install the ros-*-desktop-full ROS version, the following
+    packages are also needed to be installed via apt:
+
+    - `ros-${ROS_DISTRO}-driver-base`
+    - `ros-${ROS_DISTRO}-pcl-conversions`
 
 6. Test that the MRPT graphslam-engine application works - Execute using the
    provided sample datasets as described
