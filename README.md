@@ -86,6 +86,12 @@ $ source ~/.bashrc
     - `libv4l-dev`
     - `libaria-dev`
 
+    Additionally the following packages are needed for the transport of
+    compressed images when using the camera:
+
+    - `ros-${ROS_DISTRO}-image-common`
+    - `ros-${ROS_DISTRO}-image-transport-plugins`
+
     In case you don't install the ros-*-desktop-full ROS version, the following
     packages are also needed to be installed via apt:
 
@@ -114,7 +120,11 @@ $MRPT_DIR/bin/graphslam-engine \
 
 ## Notes
 
-In case you encounter any problem during the aforementioned process or you find
+- In case you encounter any problem during the aforementioned process or you find
 part of the instructions inaccurate, [open a Github
 issue](https://github.com/bergercookie/catkin_ws/issues)
 
+- In case compilation breaks at the `mrpt_reactivenav_2d` package, *do not
+    compile it at all*. You can do that by adding an empty `CATKIN_IGNORE` file
+    at the root of that package.
+    Version of aforementioned package is going to be pathced in a few days.
