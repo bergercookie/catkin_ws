@@ -85,6 +85,7 @@ $ source ~/.bashrc
     - `libspnav-dev`
     - `libv4l-dev`
     - `libaria-dev`
+    - `ros-${ROS_DISTRO}-joint-state-publisher`
 
     Additionally the following packages are needed for the transport of
     compressed images when using the camera:
@@ -113,7 +114,7 @@ $MRPT_DIR/bin/graphslam-engine \
 
 7. Test that the mrpt_graphslam_2d ROS wrapper works as expected, use the
    instructions provided [in the
-   mrpt_graphslam_2d](http://github.com/bergercookie/mrpt_graphslam_2d)
+   mrpt_graphslam_2d](https://github.com/bergercookie/mrpt_slam/tree/graphslam-devel/mrpt_graphslam_2d)
    package.
 
 ----------
@@ -128,3 +129,8 @@ issue](https://github.com/bergercookie/catkin_ws/issues)
     compile it at all*. You can do that by adding an empty `CATKIN_IGNORE` file
     at the root of that package.
     Version of aforementioned package is going to be pathced in a few days.
+
+- In case you want to keep your code in sync with the latest changes in the
+    remote repositories, users are encouraged to use the
+    [sync_mr_slam.sh](./sync_mr_slam.sh) script which recursively updates mrpt,
+    mr-slam-ws as well as all submodules of the latter.
