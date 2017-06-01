@@ -33,12 +33,14 @@ if ! [[ -d $catkin_ws ]]; then
     fi
 fi
 
+make_threads=16
+
 disp_section_str "Updating MRPT"
 cd $mrpt
 git pull --ff-only
 
 disp_section_str "Running make on MRPT"
-make -C $MRPT_DIR -j4 -l4
+make -C $MRPT_DIR -j${make_threads} -l${make_threads}
 
 disp_section_str "Updating catkin_ws"
 cd $catkin_ws/src
@@ -63,7 +65,7 @@ git checkout ${branch}
 git pull --ff-only
 
 disp_section_str "Running catkin_make"
-catkin_make -C $catkin_ws -j4 -l4
+catkin_make -C $catkin_ws -j${make_threads} -l${make_threads}
 
 
 echo "All set. Exiting..."
