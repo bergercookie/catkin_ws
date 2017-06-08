@@ -48,6 +48,16 @@ git pull
 git submodule sync
 git submodule update --recursive
 
+branch=master
+repo=csl_mr_slam
+disp_section_str "Checking out ${repo}/${branch}"
+cd ${repo}
+git checkout ${branch}
+git pull --ff-only
+
+cd ..
+
+
 branch=devel
 repo=mrpt_navigation
 disp_section_str "Checking out ${repo}/${branch}"
