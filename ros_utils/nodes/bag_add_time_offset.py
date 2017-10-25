@@ -31,9 +31,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import rospy
 import rosbag
-import os
-import sys
 import argparse
+
 
 def fix_bagfile(inbag, outbag, topics, offset):
     rospy.loginfo('      Processing input bagfile: %s', inbag)
@@ -47,9 +46,9 @@ def fix_bagfile(inbag, outbag, topics, offset):
 
     count = {}
     for topic in topics:
-      count[topic] = 0
+        count[topic] = 0
 
-    for topic, msg, t in rosbag.Bag(inbag).read_messages():
+    for topic, msg, t in rosbag.Bag(inbag[0]).read_messages():
         if topic in topics:
             outbag.write(topic, msg, t + time_offset)
             count[topic] = count[topic] + 1
@@ -59,19 +58,35 @@ def fix_bagfile(inbag, outbag, topics, offset):
     outbag.close()
     rospy.loginfo('Changed the following:')
     for k, v in count.iteritems():
-      rospy.loginfo( '%s:%s messages.',k,v)
+        rospy.loginfo('%s:%s messages.', k, v)
+
 
 if __name__ == "__main__":
-  rospy.init_node('bag_add_time_offset')
-  parser = argparse.ArgumentParser(
-      description='Shift the publishing time of given topics in input bagfile.')
-  parser.add_argument('-o', metavar='OUTPUT_BAGFILE', required=True, help='output bagfile')
-  parser.add_argument('-i', metavar='INPUT_BAGFILE', required=True, help='input bagfile(s)', nargs='+')
-  parser.add_argument('-of', metavar='OFFSET', required=True, type=float, help='time offset to add in seconds')
-  parser.add_argument('-t', metavar='TOPIC', required=True, help='topic(s) to change', nargs='+')
-  args = parser.parse_args()
-  try:
-      fix_bagfile(args.i, args.o, arg.t, args.of)
-  except Exception, e:
-      import traceback
-      traceback.print_exc()
+    rospy.init_node('bag_add_time_offset')
+    parser = argparse.ArgumentParser(
+        description='Shift the publishing time of given topics in input bagfile.')
+    parser.add_argument('-o',
+                        metavar='OUTPUT_BAGFILE',
+                        required=True,
+                        help='output bagfile')
+    parser.add_argument('-i',
+                        metavar='INPUT_BAGFILE',
+                        required=True,
+                        help='input bagfile(s)',
+                        nargs='+')
+    parser.add_argument('-of',
+                        metavar='OFFSET',
+                        required=True,
+                        type=float,
+                        help='time offset to add in seconds')
+    parser.add_argument('-t',
+                        metavar='TOPIC',
+                        required=True,
+                        help='topic(s) to change',
+                        nargs='+')
+    args = parser.parse_args()
+    try:
+        fix_bagfile(args.i, args.o, args.t, args.of)
+    except Exception, e:
+        import traceback
+        traceback.print_exc()

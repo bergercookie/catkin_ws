@@ -1,7 +1,10 @@
 # Software setup example
 
-Current section includes a complete example on downloading, setting up and
-configuring the graphSLAM algorithm.
+[![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/bergercookie/mastert_present/master?grs=github)
+
+Container repo for packages needed to run single, multi-robot graphSLAM.  It
+includes a complete example on downloading, setting up and configuring the
+graphSLAM algorithm.
 
 ## System prerequisites
 
